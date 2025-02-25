@@ -73,7 +73,7 @@ The robot must work autonomously and comprehend random paths traveled by the per
 ### Scenario 3: Obstacle Detection and Alternate Path
 The robot may encounter obstacles in its path and must devise a new path to reach the target person.
 
-![Test Area 3](/assets/images/IMG_9869.PNG "Test Area 3")
+![Test Area 3](assets/images/IMG_9869.PNG "Test Area 3")
 
 ## Impact
 
