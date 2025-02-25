@@ -2,36 +2,25 @@ site_name: Multipurpose Macro Load Bearing Assistive Follower Robot
 site_url: https://ras598-2025-s-team07.github.io
 repo_url: https://github.com/RAS598-2025-S-Team07/RAS598-2025-S-Team07.github.io
 edit_uri: edit/main/docs/
+
 theme:
   name: material
-  custom_dir: custom_theme/
   palette:
     primary: blue
     accent: indigo
-  font:
-    text: Roboto
   logo: static/logo.svg
   favicon: static/logo.png
-
   features:
     - navigation.tabs
     - navigation.tabs.sticky
-    - toc.follow    
-    - navigation.top
-    - navigation.path
-    - navigation.indexes
-    - navigation.prune
-    - content.action.edit
-    - navigation.footer
-#    - navigation.sections
-#    - navigation.expand
-#    - navigation.instant # doesn't work that well
+    - toc.follow
+
 nav:
   - Home: index.md
 
 markdown_extensions:
-  - attr_list #add attributes using curly brackets to images, see https://squidfunk.github.io/mkdocs-material/reference/images/
-  - md_in_html # see https://squidfunk.github.io/mkdocs-material/reference/images/
+  - attr_list
+  - md_in_html
   - footnotes
   - pymdownx.arithmatex:
       generic: true
@@ -42,14 +31,8 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
 
-draft_docs: |
-  **/*docs/index.md
-  **/*_draft.md
-  **/*_draft**
-  
 plugins:
   - search
-  - glightbox # allow resize images, see https://squidfunk.github.io/mkdocs-material/reference/images/
 
 extra_css:
   - stylesheets/extra.css  
@@ -57,15 +40,6 @@ extra_css:
 extra_javascript:
  - javascripts/mathjax.js
  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-    
-not_in_nav: |
-  static
-  
-copyright: "Copyright &copy; 2025 team-name-here"
 
-extra:
-  generator: false
-  social:
-    - icon: fontawesome/regular/file-code
-      link: /2023_fall
-      name: 2023 Site    
+copyright: "Copyright &copy; 2024 Team 7"
+
