@@ -43,7 +43,7 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 
 draft_docs: |
-  **/*index.md
+  **/*docs/index.md
   **/*_draft.md
   **/*_draft**
   
