@@ -9,6 +9,6 @@ theme:
     primary: blue
     accent: indigo
 nav:
-  - Home: index.md
+  - Home: index.md 
 
 
