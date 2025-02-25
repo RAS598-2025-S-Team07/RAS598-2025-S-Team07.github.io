@@ -1,100 +1,519 @@
-# Welcome to the Multipurpose Macro Load Bearing Assistive Follower Robot Project
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- <link rel="canonical" href="https://embedded-systems-design.github.io/template_report/"> -->
+  <link rel="icon" href="static/logo.png">
+  <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.4.0">
+  <title>Welcome - RAS 598 Report Template</title>
+  <link rel="stylesheet" href="assets/stylesheets/main.9f615399.min.css">
+  <link rel="stylesheet" href="assets/stylesheets/palette.649f08f9.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+  <style>
+    :root {
+      --md-text-font: "Roboto";
+      --md-code-font: "Roboto Mono";
+    }
+  </style>
+  <link rel="stylesheet" href="/RAS598-2025-S-Team07.github.io/main.css">
+  <link href="assets/stylesheets/glightbox.min.css" rel="stylesheet" />
+  <script>__md_scope = new URL(".", location), __md_hash = e => [...e].reduce((e, _) => (e << 5) - e + _.charCodeAt(0), 0), __md_get = (e, _ = localStorage, t = __md_scope) => JSON.parse(_.getItem(t.pathname + "." + e)), __md_set = (e, _, t = localStorage, a = __md_scope) => { try { t.setItem(a.pathname + "." + e, JSON.stringify(_)) } catch (e) { } }</script>
+  <style>
+    html.glightbox-open {
+      overflow: initial;
+      height: 100%;
+    }
 
-**Team:** 07  
-**Course:** RAS 598 Experimentation and Deployment of Robotic Systems, Arizona State University
+    .gslide-title {
+      margin-top: 0px;
+      user-select: text;
+    }
 
-## Team Members
+    .gslide-desc {
+      color: #666;
+      user-select: text;
+    }
 
-### Rhutvik Pachghare
-Pursuing a master's degree in robotics and autonomous systems, with a degree in Electrical Engineering and experience as a team lead software developer, specializing in cloud computing and multiple development languages.
+    .gslide-image img {
+      background: white;
+    }
 
-### Mohammad Nasr
-Robotics and autonomous systems PhD student specializing in designing Bio-inspired hearing for robotic platforms.
+    .gscrollbar-fixer {
+      padding-right: 15px;
+    }
 
-### Shashank Sing Deo
-B.Tech in Mechanical Engineering, worked as systems and integration engineer with Evage motors designing N1 and M3 category vehicles for Indian, Middle east and European markets.
+    .gdesc-inner {
+      font-size: 0.75rem;
+    }
 
-## Introduction
+    body[data-md-color-scheme="slate"] .gdesc-inner {
+      background: var(--md-default-bg-color);
+    }
 
-This project seeks to explore how a mobile robotic system can effectively follow and assist a user while maintaining situational awareness through obstacle detection and user recognition. Specifically, we aim to develop a follower robot using a TurtleBot equipped with a depth camera and Lidar. This system will enable hands-free transportation of small items (e.g., groceries, shopping bags, or tools) and assist with tasks like carrying a camera for photography or videography. Additionally, we will investigate how the robot can not only follow but also lead the user while maintaining a virtual leash, enhancing user experience and efficiency in personal and professional applications. Through this research, we hope to contribute to the advancement and normalization of Assistive Robots Technology in everyday life.
+    body[data-md-color-scheme="slate"] .gslide-title {
+      color: var(--md-default-fg-color);
+    }
 
-![Project Idea](/RAS598-2025-S-Team07.github.io/assets/images/IMG_9859.PNG "functional depiction of the idea")
+    body[data-md-color-scheme="slate"] .gslide-desc {
+      color: var(--md-default-fg-color);
+    }
+  </style>
+  <script src="assets/javascripts/glightbox.min.js"></script>
+</head>
 
-## Sensor Integration
+<body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+  <label class="md-overlay" for="__drawer"></label>
+  <div data-md-component="skip">
+    <a href="#welcome" class="md-skip">
+      Skip to content
+    </a>
+  </div>
+  <div data-md-component="announce">
+  </div>
 
-The assistive follower robot will utilize a combination of the depth camera and LiDAR to achieve robust user tracking and situational awareness. The depth camera will be used for user recognition and tracking, while LiDAR will be used to ensure the robot maintains an optimal following distance. Additionally, LiDAR can be used for 360-degree obstacle detection and environmental mapping, allowing the robot to navigate dynamically changing environments safely.
+  <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+    <nav class="md-header__inner md-grid" aria-label="Header">
+      <a href="." title="RAS 598 Report Template" class="md-header__button md-logo" aria-label="RAS 598 Report Template" data-md-component="logo">
+        <!-- <img src="static/logo.svg" alt="logo"> -->
+      </a>
+      <label class="md-header__button md-icon" for="__drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z" />
+        </svg>
+      </label>
+      <div class="md-header__title" data-md-component="header-title">
+        <div class="md-header__ellipsis">
+          <div class="md-header__topic">
+            <span class="md-ellipsis">
+              Multipurpose Macro Load Bearing Assistive Follower Robot
+            </span>
+          </div>
+          <div class="md-header__topic" data-md-component="header-topic">
+            <span class="md-ellipsis">
+              Welcome
+            </span>
+          </div>
+        </div>
+      </div>
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z" />
+        </svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+        <label class="md-search__overlay" for="__search"></label>
+        <div class="md-search__inner" role="search">
+          <form class="md-search__form" name="search">
+            <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+            <label class="md-search__icon md-icon" for="__search">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.9l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z" />
+              </svg>
+            </label>
+            <nav class="md-search__options" aria-label="Search">
+              <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 17.59 13.41 12 19 6.41Z" />
+                </svg>
+              </button>
+            </nav>
+          </form>
+          <div class="md-search__output">
+            <div class="md-search__scrollwrap" data-md-scrollfix>
+              <div class="md-search-result" data-md-component="search-result">
+                <div class="md-search-result__meta">
+                  Initializing search
+                </div>
+                <ol class="md-search-result__list" role="presentation"></ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="md-header__source">
+        <a href="https://github.com/RAS598-2025-S-Team07/RAS598-2025-S-Team07.github.io" title="Go to repository" class="md-source" data-md-component="source">
+          <div class="md-source__icon md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.555 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z" />
+            </svg>
+          </div>
+          <div class="md-source__repository">
+            GitHub
+          </div>
+        </a>
+      </div>
+    </nav>
+    <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+      <div class="md-grid">
+        <ul class="md-tabs__list">
+          <li class="md-tabs__item md-tabs__item--active">
+            <a href="." class="md-tabs__link">
+              Welcome
+            </a>
+          </li>
+          <li class="md-tabs__item">
+            <a href="charts/" class="md-tabs__link">
+              Charts
+            </a>
+          </li>
+          <li class="md-tabs__item">
+            <a href="esp-32-table/" class="md-tabs__link">
+              ESP32 Table
+            </a>
+          </li>
+          <li class="md-tabs__item">
+            <a href="pic-table/" class="md-tabs__link">
+              PIC Table
+            </a>
+          </li>
+          <li class="md-tabs__item">
+            <a href="second-page/" class="md-tabs__link">
+              Second Page
+            </a>
+          </li>
+          <li class="md-tabs__item">
+            <a href="component-selection-example/" class="md-tabs__link">
+              Component selection example
+            </a>
+          </li>
+          <li class="md-tabs__item">
+            <a href="subfolder/" class="md-tabs__link">
+              Subfolder
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
 
-![Sensor Integration](/RAS598-2025-S-Team07.github.io/assets/images/IMG_9871.PNG "Sensor Integration")
+  <div class="md-container" data-md-component="container">
+    <main class="md-main" data-md-component="main">
+      <div class="md-main__inner md-grid">
+        <div class="md-content" data-md-component="content">
+          <article class="md-content__inner md-typeset">
+            <!-- Welcome Section -->
+            <section id="welcome">
+              <h1>Welcome to the Multipurpose Macro Load Bearing Assistive Follower Robot Project</h1>
+              <p><strong>Team:</strong> 07</p>
+              <p><strong>Course:</strong> RAS 598 Experimentation and Deployment of Robotic Systems, Arizona State University</p>
+            </section>
 
-## Interaction
+            <!-- Team Members Section -->
+            <section id="team-members">
+              <h2>Team Members</h2>
+              <div class="team-members">
+                <!-- Rhutvik Pachghare -->
+                <div class="team-member">
+                  <h3>Rhutvik Pachghare</h3>
+                  <div class="team-member__description">
+                    <h6><p>Pursuing a master's degree in robotics and autonomous systems, with a degree in Electrical Engineering and experience as a team lead software developer, specializing in cloud computing and multiple development languages.</p></h6>
+                  </div>
+                </div>
+            
+                <!-- Mohammad Nasr -->
+                <div class="team-member">
+                  <h3>Mohammad Nasr</h3>
+                  <div class="team-member__description">
+                    <h6><p>Robotics and autonomous systems PhD student specializing in designing Bio-inspired hearing for robotic platforms.</p></h6>
+                  </div>
+                </div>
+            
+                <!-- Shashank Sing Deo -->
+                <div class="team-member">
+                  <h3>Shashank Sing Deo</h3>
+                  <div class="team-member__description">
+                  <h6><p>B.Tech in Mechanical Engineering, worked as systems and integration engineer with Evage motors designing N1 and M3 category vehicles for Indian, Middle east and European markets.</p></h6>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-The TurtleBot 4 is equipped with a depth camera, LiDAR, and a Raspberry Pi board, enabling advanced interaction and control capabilities. The depth camera can stream images over a ROS2 topic, allowing high-level image processing tasks such as walking pattern recognition or face recognition. To ensure smooth and real-time processing, the image data will be streamed to our PC with more computational power. The results, such as user position or identity, will then be communicated back to the TurtleBot over ROS2, influencing its movement decisions accordingly. LiDAR will provide 360-degree obstacle detection, environmental mapping, and can be used to ensure the robot maintains an optimal following distance while navigating the environment. Moreover, by integrating LiDAR data with a Gap-finding algorithm, the robot will intelligently identify safe passages between obstacles, enabling collision-free navigation even in complex surroundings.
+            <!-- Introduction Section -->
+            <section id="introduction">
+              <div class="introduction">
+                <div class="introduction__media">
+                  <div class="media-card">
+                    <a href="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9859.PNG" data-glightbox="title: Project Idea; description: This is the project idea image.">
+                      <img src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9859.PNG" alt="Project Idea" class="introduction__photo">
+                    </a>
+                    <p class="image-description">functional depiction of the idea (a) the turtlebot carrying a payload and following shashank while detecting any obstacle in its path or vicinity. (b) the turtle bot is mounted with a tablet/smartphone holder to follow tourists around while taking their selfies.</p>
+                  </div>
+                </div>
+                <div class="introduction__text">
+                  <h2>Introduction</h2>
+                  <p>This project seeks to explore how a mobile robotic system can effectively follow and assist a user while maintaining situational awareness through obstacle detection and user recognition. Specifically, we aim to develop a follower robot using a TurtleBot equipped with a depth camera and Lidar. This system will enable hands-free transportation of small items (e.g., groceries, shopping bags, or tools) and assist with tasks like carrying a camera for photography or videography. Additionally, we will investigate how the robot can not only follow but also lead the user while maintaining a virtual leash, enhancing user experience and efficiency in personal and professional applications. Through this research, we hope to contribute to the advancement and normalization of Assistive Robots Technology in everyday life.</p>
+                </div>
+              </div>
+            </section>
+            <!-- Sensor Integration Section -->
+            <section id="sensor-integration">
+              <div class="sensor-integration">
+                <div class="sensor-integration__media">
+                  <div class="media-card">
+                    <a href="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9871.PNG" data-glightbox="title: Sensor Integration; description: This is the sensor integration image.">
+                      <img src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9871.PNG" alt="Sensor Integration" class="sensor-integration__photo">
+                    </a>
+                    <!-- <p class="image-description">This is the sensor integration image.</p> -->
+                  </div>
+                </div>
+                <div class="sensor-integration__text">
+                  <h2>Sensor Integration</h2>
+                  <p>The assistive follower robot will utilize a combination of the depth camera and LiDAR to achieve robust user tracking and situational awareness. The depth camera will be used for user recognition and tracking, while LiDAR will be used to ensure the robot maintains an optimal following distance. Additionally, LiDAR can be used for 360-degree obstacle detection and environmental mapping, allowing the robot to navigate dynamically changing environments safely.</p>
+                </div>
+              </div>
+            </section>
 
-![Interaction](/RAS598-2025-S-Team07.github.io/assets/images/IMG_9870.PNG "Interaction between various components")
+            <!-- Interaction Section -->
+            <section id="interaction">
+              <div class="interaction">
+                <div class="interaction__media">
+                  <div class="media-card">
+                    <a href="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9870.PNG" data-glightbox="title: Interaction; description: This is the interaction image.">
+                      <img src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9870.PNG" alt="Interaction" class="interaction__photo">
+                    </a>
+                    <p class="image-description"> Interaction between various components intended. (a) The mode of communication with the turtlebot would be via ros2, (b) & (c)Connection with the NVidia Jetson Nano for better data processing, (d) Graphics interacting with the processing board, (e) Control Commands, (f) Data Storage, (g) Face recognition. </p>
+                  </div>
+                </div>
+                <div class="interaction__text">
+                  <h2>Interaction</h2>
+                  <p>The TurtleBot 4 is equipped with a depth camera, LiDAR, and a Raspberry Pi board, enabling advanced interaction and control capabilities. The depth camera can stream images over a ROS2 topic, allowing high-level image processing tasks such as walking pattern recognition or face recognition. To ensure smooth and real-time processing, the image data will be streamed to our PC with more computational power. The results, such as user position or identity, will then be communicated back to the TurtleBot over ROS2, influencing its movement decisions accordingly. LiDAR will provide 360-degree obstacle detection, environmental mapping, and can be used to ensure the robot maintains an optimal following distance while navigating the environment. Moreover, by integrating LiDAR data with a Gap-finding algorithm, the robot will intelligently identify safe passages between obstacles, enabling collision-free navigation even in complex surroundings.</p>
+                </div>
+              </div>
+            </section>
 
-## Control and Autonomy
+            <!-- Control and Autonomy Section -->
+            <!-- <section id="control-and-autonomy">
+              <div class="control-and-autonomy">
+                <div class="control-and-autonomy__media">
+                  <div class="media-card">
+                    <a href="path_to_control_image.png" data-glightbox="title: Control and Autonomy; description: This is the control and autonomy image.">
+                      <img src="path_to_control_image.png" alt="Control and Autonomy" class="control-and-autonomy__photo">
+                    </a>
+                    <p class="image-description">This is the control and autonomy image.</p>
+                  </div>
+                </div>
+                <div class="control-and-autonomy__text">
+                  <h2>Control and Autonomy</h2>
+                  <p>The depth camera will provide real-time user tracking and recognition data, which will be processed on an external PC for advanced image processing tasks. The processed information, such as the user’s position or direction relative to the robot, will then be communicated back to the TurtleBot as feedback, enabling it to adjust its direction of motion accordingly. LiDAR feedback will be primarily used for dynamic obstacle detection and maintaining an optimal distance from the user and surrounding walls. Additionally, LiDAR data will enhance the accuracy of depth information by cross-referencing user position. Specifically, the user’s relative angle obtained from image data will inform the robot about which LiDAR beam is detecting the user, thereby providing precise positional information.Finally, by integrating LiDAR data with the Gap-finding algorithm, the robot will intelligently identify safe passages between obstacles and navigate through them without collisions. </p>
+                </div>
+              </div>
+            </section> -->
 
-The depth camera will provide real-time user tracking and recognition data, which will be processed on an external PC for advanced image processing tasks. The processed information, such as the user’s position or direction relative to the robot, will then be communicated back to the TurtleBot as feedback, enabling it to adjust its direction of motion accordingly. LiDAR feedback will be primarily used for dynamic obstacle detection and maintaining an optimal distance from the user and surrounding walls. Additionally, LiDAR data will enhance the accuracy of depth information by cross-referencing user position. Specifically, the user’s relative angle obtained from image data will inform the robot about which LiDAR beam is detecting the user, thereby providing precise positional information. Finally, by integrating LiDAR data with the Gap-finding algorithm, the robot will intelligently identify safe passages between obstacles and navigate through them without collisions.
+            <section id="final-demonstration">
+              <h2>Control and Autonomy</h2>
+              <p>The depth camera will provide real-time user tracking and recognition data, which will be processed on an external PC for advanced image processing tasks. The processed information, such as the user’s position or direction relative to the robot, will then be communicated back to the TurtleBot as feedback, enabling it to adjust its direction of motion accordingly. LiDAR feedback will be primarily used for dynamic obstacle detection and maintaining an optimal distance from the user and surrounding walls. Additionally, LiDAR data will enhance the accuracy of depth information by cross-referencing user position. Specifically, the user’s relative angle obtained from image data will inform the robot about which LiDAR beam is detecting the user, thereby providing precise positional information.Finally, by integrating LiDAR data with the Gap-finding algorithm, the robot will intelligently identify safe passages between obstacles and navigate through them without collisions.</p>
+            </section>
 
-## Preparation Needs
+            <!-- Preparation Needs Section -->
+            <section id="preparation-needs">
+              <h2>Preparation Needs</h2>
+              <div class="preparation-needs">
+                <div class="preparation-needs__card">
+                  <h3>What do you need to know to be successful?</h3>
+                  <ul>
+                    <li>To use a Nvidia Jetson Nano with a camera and LiDAR</li>
+                    <li>Learn to calibrate and operate the hardware like camera, LiDAR, Raspberry Pi</li>
+                    <li>Machine learning tools or OpenCV for optimal image processing</li>
+                    <li>Data filtering</li>
+                    <li>Control Logic and data flow</li>
+                  </ul>
+                </div>
+                <div class="preparation-needs__card">
+                  <h3>Which of those topics do you need to cover in class?</h3>
+                  <ul>
+                    <li>To use a Nvidia Jetson Nano with a camera and LiDAR</li>
+                    <li>Data filtering</li>
+                    <li>Control Logic and data flow</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
 
-### What do you need to know to be successful?
-- To use a Nvidia Jetson Nano with a camera and LiDAR
-- Learn to calibrate and operate the hardware like camera, LiDAR, Raspberry Pi
-- Machine learning tools or OpenCV for optimal image processing
-- Data filtering
-- Control Logic and data flow
+            <!-- Final Demonstration Section -->
+            <section id="final-demonstration">
+              <h2>Final Demonstration</h2>
+              <p>Conditions change in any environment. How will your robot handle variability in its environment?</p>
+              <ul>
+                <li>Potential environmental variabilities include lighting conditions, the user’s relative direction with respect to the robot, and narrow gaps smaller than the robot’s diameter.</li>
+                <li>Changes in lighting conditions can affect image processing and user recognition accuracy. To address this, more advanced image processing algorithms that are robust to lighting variations will be explored.</li>
+                <li>In scenarios where the robot encounters narrow gaps that are smaller than its diameter, the robot needs predefined behavior. For instance, the robot can either stop or emit a sound to alert the user, ensuring safe navigation without collisions.</li>
+                <li>To maintain accurate user tracking during movement, an optimal update rate for user position data will be determined. This will allow the robot to dynamically adjust the LiDAR beam it uses for distance keeping and movement direction correction, ensuring responsive and adaptive following behavior.</li>
+              </ul>
+            </section>
 
-### Which of those topics do you need to cover in class?
-- To use a Nvidia Jetson Nano with a camera and LiDAR
-- Data filtering
-- Control Logic and data flow
+            <section id="testing-evaluation">
+              <h2>Testing & Evaluation Plan</h2>
+              <div class="testing-cards">
+                <!-- Card for Scenario 1 -->
+                <div class="testing-card">
+                  <h3>Scenario 1: Linear and Turning Motion</h3>
+                  <p>The robot follows the person in a straight line and takes turns as the person takes turns in a 2000mm x 1500mm test area divided into 500mm vertical sections as shown.</p>
+                  <div class="testing-media">
+                    <div class="media-card">
+                      <a href="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9868.PNG" data-glightbox="title: Test Area 1; description: This is the test area 1 image.">
+                        <img src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9868.PNG" alt="Test Area 1" class="testing-photo">
+                      </a>
+                      <p class="image-description">This is the test area 1 image.</p>
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Card for Scenario 2 -->
+                <div class="testing-card">
+                  <h3>Scenario 2: Random Path Tracking</h3>
+                  <p>The robot must work autonomously and comprehend random paths traveled by the person. We plan to place start and stop markers for the target randomly in the test area with obstacles like traffic cones as shown.</p>
+                  <div class="testing-media">
+                    <div class="media-card">
+                      <a href="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9867.PNG" data-glightbox="title: Test Area 2; description: This is the test area 2 image.">
+                        <img src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9867.PNG" alt="Test Area 2" class="testing-photo">
+                      </a>
+                      <p class="image-description">This is the test area 2 image.</p>
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Card for Scenario 3 -->
+                <div class="testing-card">
+                  <h3>Scenario 3: Obstacle Detection and Alternate Path</h3>
+                  <p>The robot may encounter obstacles in its path and must devise a new path to reach the target person as shown.</p>
+                  <div class="testing-media">
+                    <div class="media-card">
+                      <a href="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9869.PNG" data-glightbox="title: Test Area 3; description: This is the test area 3 image.">
+                        <img src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9869.PNG" alt="Test Area 3" class="testing-photo">
+                      </a>
+                      <p class="image-description">This is the test area 3 image.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-## Final Demonstration
+            <!-- Impact Section -->
+            <section id="impact">
+              <h2>Impact</h2>
+              <p>This project will advance assistive robotics by developing a follower robot that can safely navigate and help users in dynamic environments. It will help us learn advanced ROS2 communication, multi-sensor data fusion, and computer vision for real-time processing. We will also gain experience in dynamic path planning and obstacle avoidance. The knowledge gained will enhance our skills in robotics and autonomy. Our work can also contribute to course development by serving as an example helping future students.</p>
+            </section>
 
-Conditions change in any environment. How will your robot handle variability in its environment?
-- Potential environmental variabilities include lighting conditions, the user’s relative direction with respect to the robot, and narrow gaps smaller than the robot’s diameter.
-- Changes in lighting conditions can affect image processing and user recognition accuracy. To address this, more advanced image processing algorithms that are robust to lighting variations will be explored.
-- In scenarios where the robot encounters narrow gaps that are smaller than its diameter, the robot needs predefined behavior. For instance, the robot can either stop or emit a sound to alert the user, ensuring safe navigation without collisions.
-- To maintain accurate user tracking during movement, an optimal update rate for user position data will be determined. This will allow the robot to dynamically adjust the LiDAR beam it uses for distance keeping and movement direction correction, ensuring responsive and adaptive following behavior.
+            <!-- Project Advisor Section -->
+            <section id="project-advisor">
+              <h2>Project Advisor</h2>
+              <p><strong>Dr.Daniel Aukes</strong></p>
+              <p>Dr.Daniel Aukes is an Associate Professor and the director of the IDEAlab.  His research investigates the nexus of design, manufacturing, and data-driven decision-making to develop robots that can operate in niche environments, with a focus on affordability and accessibility. IDEALab projects focus on new tools for designing robots by pairing emerging fabrication techniques and new materials with analytical and simulation-based methods for understanding the behavior of complex systems.</p>
+            </section>
 
-## Testing & Evaluation Plan
+            <!-- Weekly Milestones Section -->
+            <section id="weekly-milestones">
+              <h2>Weekly Milestones</h2>
+              <table>
+                <tr>
+                  <th>Week</th>
+                  <th>Hardware Integration</th>
+                  <th>Interface Development</th>
+                  <th>Sensors</th>
+                  <th>Controls & Autonomy</th>
+                </tr>
+                <tr>
+                  <td>Week 7</td>
+                  <td>Set up TurtleBot 4, all team members access, configuration</td>
+                  <td>N/A</td>
+                  <td>Test data publishing from depth camera and LiDAR, IMU on ROS2 topics</td>
+                  <td>N/A</td>
+                </tr>
+                <tr>
+                  <td>Week 8</td>
+                  <td>Calibrate depth camera for user recognition; Configure LiDAR</td>
+                  <td>Learn Rviz and Gazebo</td>
+                  <td>Verify sensor data accuracy and publish on ROS2 topics</td>
+                  <td>N/A</td>
+                </tr>
+                <tr>
+                  <td>Week 9</td>
+                  <td>Ensure smooth data streaming to external PC for image processing</td>
+                  <td>Use data visualization in real time with Rviz</td>
+                  <td>Implement LiDAR, Depth Camera data</td>
+                  <td>N/A</td>
+                </tr>
+                <tr>
+                  <td>Week 10</td>
+                  <td>Finalize hardware setup and connections</td>
+                  <td>Implement interaction features: mode switching, emergency stop, and distance adjustment</td>
+                  <td>Implement LiDAR, Depth Camera data</td>
+                  <td>Try object avoidance</td>
+                </tr>
+                <tr>
+                  <td>Week 11</td>
+                  <td>N/A</td>
+                  <td>User recognition modeling</td>
+                  <td>Implement data acquisition and filtering for depth camera and LiDAR</td>
+                  <td>Implement object avoidance</td>
+                </tr>
+                <tr>
+                  <td>Week 12</td>
+                  <td>N/A</td>
+                  <td>User recognition modeling</td>
+                  <td>Real time image streaming and prediction</td>
+                  <td>N/A</td>
+                </tr>
+                <tr>
+                  <td>Week 13</td>
+                  <td>N/A</td>
+                  <td>Real time user position update</td>
+                  <td>Integrate sensor fusion</td>
+                  <td>Implement motion control using user position feedback, and LiDAR data</td>
+                </tr>
+                <tr>
+                  <td>Week 14</td>
+                  <td>N/A</td>
+                  <td>N/A</td>
+                  <td>Final sensor tuning and data visualization</td>
+                  <td>System integration testing and debugging</td>
+                </tr>
+                <tr>
+                  <td>Week 15</td>
+                  <td>Test Hardware in Demo Room</td>
+                  <td>Test interaction features in Demo Room</td>
+                  <td>Validate sensor accuracy and reliability</td>
+                  <td>Final Test control logic and decision-making in dynamic environments</td>
+                </tr>
+                <tr>
+                  <td>Week 16</td>
+                  <td>Demo</td>
+                  <td>Demo</td>
+                  <td>Demo</td>
+                  <td>Demo</td>
+                </tr>
+              </table>
+            </section>
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
 
-### Scenario 1: Linear and Turning Motion
-The robot follows the person in a straight line and takes turns as the person takes turns in a 2000mm x 1500mm test area divided into 500mm vertical sections.
-
-![Test Area 1](/RAS598-2025-S-Team07.github.io/assets/images/IMG_9868.PNG "Test Area 1")
-
-### Scenario 2: Random Path Tracking
-The robot must work autonomously and comprehend random paths traveled by the person. We plan to place start and stop markers for the target randomly in the test area with obstacles like traffic cones.
-
-![Test Area 2](/RAS598-2025-S-Team07.github.io/assets/images/IMG_9867.PNG "Test Area 2")
-
-### Scenario 3: Obstacle Detection and Alternate Path
-The robot may encounter obstacles in its path and must devise a new path to reach the target person.
-
-![Test Area 3](/RAS598-2025-S-Team07.github.io/assets/images/IMG_9869.PNG "Test Area 3")
-
-## Impact
-
-This project will advance assistive robotics by developing a follower robot that can safely navigate and help users in dynamic environments. It will help us learn advanced ROS2 communication, multi-sensor data fusion, and computer vision for real-time processing. We will also gain experience in dynamic path planning and obstacle avoidance. The knowledge gained will enhance our skills in robotics and autonomy. Our work can also contribute to course development by serving as an example helping future students.
-
-## Project Advisor
-
-**Dr. Daniel Aukes**  
-Dr. Daniel Aukes is an Associate Professor and the director of the IDEAlab. His research investigates the nexus of design, manufacturing, and data-driven decision-making to develop robots that can operate in niche environments, with a focus on affordability and accessibility. IDEALab projects focus on new tools for designing robots by pairing emerging fabrication techniques and new materials with analytical and simulation-based methods for understanding the behavior of complex systems.
-
-## Weekly Milestones
-
-| Week | Hardware Integration | Interface Development | Sensors | Controls & Autonomy |
-|------|-----------------------|-----------------------|---------|---------------------|
-| Week 7 | Set up TurtleBot 4, all team members access, configuration | N/A | Test data publishing from depth camera and LiDAR, IMU on ROS2 topics | N/A |
-| Week 8 | Calibrate depth camera for user recognition; Configure LiDAR | Learn Rviz and Gazebo | Verify sensor data accuracy and publish on ROS2 topics | N/A |
-| Week 9 | Ensure smooth data streaming to external PC for image processing | Use data visualization in real time with Rviz | Implement LiDAR, Depth Camera data | N/A |
-| Week 10 | Finalize hardware setup and connections | Implement interaction features: mode switching, emergency stop, and distance adjustment | Implement LiDAR, Depth Camera data | Try object avoidance |
-| Week 11 | N/A | User recognition modeling | Implement data acquisition and filtering for depth camera and LiDAR | Implement object avoidance |
-| Week 12 | N/A | User recognition modeling | Real time image streaming and prediction | N/A |
-| Week 13 | N/A | Real time user position update | Integrate sensor fusion | Implement motion control using user position feedback, and LiDAR data |
-| Week 14 | N/A | N/A | Final sensor tuning and data visualization | System integration testing and debugging |
-| Week 15 | Test Hardware in Demo Room | Test interaction features in Demo Room | Validate sensor accuracy and reliability | Final Test control logic and decision-making in dynamic environments |
-| Week 16 | Demo | Demo | Demo | Demo |
+  <footer class="md-footer">
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-copyright">
+          <div class="md-copyright__highlight">
+            Copyright &copy; 2024 team-name-here
+          </div>
+        </div>
+        <div class="md-social">
+          <a href="/2023_fall" target="_blank" rel="noopener" title="2023 Site" class="md-social__link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+              <path d="M64 464c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16h160v80c0 17.7 14.3 32 32 32h80v288c0 8.8-7.2 16-16 16H64zm973 289c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0L79 303c-9.4 9.4-9.4 24.6 0 333.9l48 48c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-333.9l-31-31 31c9.4-9.4 9.4-24.6 0-333.9l-48-48c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6-9.4 33.9 0 9.4-24.6 0-333.9l31 31-31 31c-9.4 9.4-24.6 0-333.9z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
