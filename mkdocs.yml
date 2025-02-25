@@ -26,6 +26,8 @@ theme:
 #    - navigation.sections
 #    - navigation.expand
 #    - navigation.instant # doesn't work that well
+nav:
+  - Home: index.md
 
 markdown_extensions:
   - attr_list #add attributes using curly brackets to images, see https://squidfunk.github.io/mkdocs-material/reference/images/
@@ -59,7 +61,7 @@ extra_javascript:
 not_in_nav: |
   static
   
-copyright: "Copyright &copy; 2024 team-name-here"
+copyright: "Copyright &copy; 2025 team-name-here"
 
 extra:
   generator: false
