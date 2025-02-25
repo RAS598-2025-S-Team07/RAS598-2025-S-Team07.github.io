@@ -1,45 +1,14 @@
 site_name: Multipurpose Macro Load Bearing Assistive Follower Robot
-site_url: https://ras598-2025-s-team07.github.io
-repo_url: https://github.com/RAS598-2025-S-Team07/RAS598-2025-S-Team07.github.io
-edit_uri: edit/main/docs/
+site_url:  https://ras598-2025-s-team07.github.io
+repo_url:  https://github.com/RAS598-2025-S-Team07/RAS598-2025-S-Team07.github.io
+edit_uri:  edit/main/docs/
 
 theme:
   name: material
   palette:
     primary: blue
     accent: indigo
-  logo: static/logo.svg
-  favicon: static/logo.png
-  features:
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - toc.follow
-
 nav:
   - Home: index.md
 
-markdown_extensions:
-  - attr_list
-  - md_in_html
-  - footnotes
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.tilde: {}
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-
-plugins:
-  - search
-
-extra_css:
-  - stylesheets/extra.css  
-
-extra_javascript:
- - javascripts/mathjax.js
- - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-
-copyright: "Copyright &copy; 2024 Team 7" 
 
