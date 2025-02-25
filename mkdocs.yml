@@ -15,7 +15,7 @@ theme:
 
 
 nav:
-  - Home: index.md
+  - Home: /docs/index.md
 
 
   - pymdownx.arithmatex:
