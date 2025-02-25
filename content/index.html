@@ -741,13 +741,13 @@
 <p>B.Tech in Mechanical Engineering, worked as systems and integration engineer with Evage motors designing N1 and M3 category vehicles for Indian, Middle east and European markets.</p>
 <h2 id="introduction">Introduction</h2>
 <p>This project seeks to explore how a mobile robotic system can effectively follow and assist a user while maintaining situational awareness through obstacle detection and user recognition. Specifically, we aim to develop a follower robot using a TurtleBot equipped with a depth camera and Lidar. This system will enable hands-free transportation of small items (e.g., groceries, shopping bags, or tools) and assist with tasks like carrying a camera for photography or videography. Additionally, we will investigate how the robot can not only follow but also lead the user while maintaining a virtual leash, enhancing user experience and efficiency in personal and professional applications. Through this research, we hope to contribute to the advancement and normalization of Assistive Robots Technology in everyday life.</p>
-<p><img alt="Project Idea" src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9859.PNG" title="functional depiction of the idea" /></p>
+<p><img alt="Project Idea" src="/assets/images/IMG_9859.PNG" title="functional depiction of the idea" /></p>
 <h2 id="sensor-integration">Sensor Integration</h2>
 <p>The assistive follower robot will utilize a combination of the depth camera and LiDAR to achieve robust user tracking and situational awareness. The depth camera will be used for user recognition and tracking, while LiDAR will be used to ensure the robot maintains an optimal following distance. Additionally, LiDAR can be used for 360-degree obstacle detection and environmental mapping, allowing the robot to navigate dynamically changing environments safely.</p>
-<p><img alt="Sensor Integration" src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9871.PNG" title="Sensor Integration" /></p>
+<p><img alt="Sensor Integration" src="/assets/images/IMG_9871.PNG" title="Sensor Integration" /></p>
 <h2 id="interaction">Interaction</h2>
 <p>The TurtleBot 4 is equipped with a depth camera, LiDAR, and a Raspberry Pi board, enabling advanced interaction and control capabilities. The depth camera can stream images over a ROS2 topic, allowing high-level image processing tasks such as walking pattern recognition or face recognition. To ensure smooth and real-time processing, the image data will be streamed to our PC with more computational power. The results, such as user position or identity, will then be communicated back to the TurtleBot over ROS2, influencing its movement decisions accordingly. LiDAR will provide 360-degree obstacle detection, environmental mapping, and can be used to ensure the robot maintains an optimal following distance while navigating the environment. Moreover, by integrating LiDAR data with a Gap-finding algorithm, the robot will intelligently identify safe passages between obstacles, enabling collision-free navigation even in complex surroundings.</p>
-<p><img alt="Interaction" src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9870.PNG" title="Interaction between various components" /></p>
+<p><img alt="Interaction" src="/assets/images/IMG_9870.PNG" title="Interaction between various components" /></p>
 <h2 id="control-and-autonomy">Control and Autonomy</h2>
 <p>The depth camera will provide real-time user tracking and recognition data, which will be processed on an external PC for advanced image processing tasks. The processed information, such as the user’s position or direction relative to the robot, will then be communicated back to the TurtleBot as feedback, enabling it to adjust its direction of motion accordingly. LiDAR feedback will be primarily used for dynamic obstacle detection and maintaining an optimal distance from the user and surrounding walls. Additionally, LiDAR data will enhance the accuracy of depth information by cross-referencing user position. Specifically, the user’s relative angle obtained from image data will inform the robot about which LiDAR beam is detecting the user, thereby providing precise positional information. Finally, by integrating LiDAR data with the Gap-finding algorithm, the robot will intelligently identify safe passages between obstacles and navigate through them without collisions.</p>
 <h2 id="preparation-needs">Preparation Needs</h2>
@@ -774,13 +774,13 @@
 <h2 id="testing-evaluation-plan">Testing &amp; Evaluation Plan</h2>
 <h3 id="scenario-1-linear-and-turning-motion">Scenario 1: Linear and Turning Motion</h3>
 <p>The robot follows the person in a straight line and takes turns as the person takes turns in a 2000mm x 1500mm test area divided into 500mm vertical sections.</p>
-<p><img alt="Test Area 1" src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9868.PNG" title="Test Area 1" /></p>
+<p><img alt="Test Area 1" src="/assets/images/IMG_9868.PNG" title="Test Area 1" /></p>
 <h3 id="scenario-2-random-path-tracking">Scenario 2: Random Path Tracking</h3>
 <p>The robot must work autonomously and comprehend random paths traveled by the person. We plan to place start and stop markers for the target randomly in the test area with obstacles like traffic cones.</p>
-<p><img alt="Test Area 2" src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9867.PNG" title="Test Area 2" /></p>
+<p><img alt="Test Area 2" src="/assets/images/IMG_9867.PNG" title="Test Area 2" /></p>
 <h3 id="scenario-3-obstacle-detection-and-alternate-path">Scenario 3: Obstacle Detection and Alternate Path</h3>
 <p>The robot may encounter obstacles in its path and must devise a new path to reach the target person.</p>
-<p><img alt="Test Area 3" src="/RAS598-2025-S-Team07.github.io/assets/images/IMG_9869.PNG" title="Test Area 3" /></p>
+<p><img alt="Test Area 3" src="/assets/images/IMG_9869.PNG" title="Test Area 3" /></p>
 <h2 id="impact">Impact</h2>
 <p>This project will advance assistive robotics by developing a follower robot that can safely navigate and help users in dynamic environments. It will help us learn advanced ROS2 communication, multi-sensor data fusion, and computer vision for real-time processing. We will also gain experience in dynamic path planning and obstacle avoidance. The knowledge gained will enhance our skills in robotics and autonomy. Our work can also contribute to course development by serving as an example helping future students.</p>
 <h2 id="project-advisor">Project Advisor</h2>
