@@ -1,6 +1,6 @@
 site_name: Multipurpose Macro Load Bearing Assistive Follower Robot
-site_url: https://embedded-systems-design.github.io/template_report
-repo_url: https://github.com/embedded-systems-design/template_report
+site_url: https://ras598-2025-s-team07.github.io
+repo_url: https://github.com/RAS598-2025-S-Team07/RAS598-2025-S-Team07.github.io
 edit_uri: edit/main/docs/
 theme:
   name: material
