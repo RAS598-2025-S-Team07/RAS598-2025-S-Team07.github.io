@@ -1,4 +1,4 @@
-site_name: EGR314 Report Template
+site_name: Multipurpose Macro Load Bearing Assistive Follower Robot
 site_url: https://embedded-systems-design.github.io/template_report
 repo_url: https://github.com/embedded-systems-design/template_report
 edit_uri: edit/main/docs/
@@ -41,7 +41,7 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 
 draft_docs: |
-  **/*_unpublished.md
+  **/*index.md
   **/*_draft.md
   **/*_draft**
   
