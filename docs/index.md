@@ -15,8 +15,7 @@ Robotics and autonomous systems PhD student specializing in designing Bio-inspir
 B.Tech in Mechanical Engineering, worked as systems and integration engineer with Evage motors designing N1 and M3 category vehicles for Indian, Middle east and European markets.
 
 ## Introduction
-
-This project seeks to explore how a mobile robotic system can effectively follow and assist a user while maintaining situational awareness through obstacle detection and user recognition. Specifically, we aim to develop a follower robot using a TurtleBot equipped with a depth camera and Lidar. This system will enable hands-free transportation of small items (e.g., groceries, shopping bags, or tools) and assist with tasks like carrying a camera for photography or videography. Additionally, we will investigate how the robot can not only follow but also lead the user while maintaining a virtual leash, enhancing user experience and efficiency in personal and professional applications. Through this research, we hope to contribute to the advancement and normalization of Assistive Robots Technology in everyday life.
+This project seeks to explore how a mobile robotic system can effectively follow and assist a user while maintaining situational awareness through obstacle detection and user recognition. Specifically, we aim to develop a follower robot using a TurtleBot equipped with a depth camera and Lidar. This system will enable hands-free transportation of small items (e.g., groceries, shopping bags, or tools) and assist with tasks like carrying a camera for photography or videography. Through this research, we hope to contribute to the advancement and normalization of Assistive Robots Technology in everyday life.
 
 ![Project Idea](/assets/images/IMG_9859.PNG "functional depiction of the idea")
 
@@ -28,25 +27,27 @@ The assistive follower robot will utilize a combination of the depth camera and 
 
 ## Interaction
 
-The TurtleBot 4 is equipped with a depth camera, LiDAR, and a Raspberry Pi board, enabling advanced interaction and control capabilities. The depth camera can stream images over a ROS2 topic, allowing high-level image processing tasks such as walking pattern recognition or face recognition. To ensure smooth and real-time processing, the image data will be streamed to our PC with more computational power. The results, such as user position or identity, will then be communicated back to the TurtleBot over ROS2, influencing its movement decisions accordingly. LiDAR will provide 360-degree obstacle detection, environmental mapping, and can be used to ensure the robot maintains an optimal following distance while navigating the environment. Moreover, by integrating LiDAR data with a Gap-finding algorithm, the robot will intelligently identify safe passages between obstacles, enabling collision-free navigation even in complex surroundings.
+The TurtleBot 4 is equipped with a depth camera, LiDAR, and a Raspberry Pi board, enabling effective interaction and control. Due to the limited field of view of the depth camera and the desire to reduce computational load on the Raspberry Pi, we have adopted shoe detection as a lightweight and focused approach for user identification. A custom-trained model will detect the user's shoes, allowing us to estimate their direction relative to the image center. The image data will be processed externally on a PC or online on the raspberry pi, and the results will be used to guide robot's motion.
+
+LiDAR will be used for 360-degree obstacle detection and distance maintenance, and will play a central role in real-time gap-finding navigation. In situations where the robot is unable to find a viable local path using the gap-finding algorithm, it will fall back on a pre-built SLAM map to determine an alternative route. This layered approach allows the robot to adapt intelligently to dynamic and complex environments.
 
 ![Interaction](/assets/images/IMG_9870.PNG "Interaction between various components")
 
 ## Control and Autonomy
 
-The depth camera will provide real-time user tracking and recognition data, which will be processed on an external PC for advanced image processing tasks. The processed information, such as the user’s position or direction relative to the robot, will then be communicated back to the TurtleBot as feedback, enabling it to adjust its direction of motion accordingly. LiDAR feedback will be primarily used for dynamic obstacle detection and maintaining an optimal distance from the user and surrounding walls. Additionally, LiDAR data will enhance the accuracy of depth information by cross-referencing user position. Specifically, the user’s relative angle obtained from image data will inform the robot about which LiDAR beam is detecting the user, thereby providing precise positional information. Finally, by integrating LiDAR data with the Gap-finding algorithm, the robot will intelligently identify safe passages between obstacles and navigate through them without collisions.
+The depth camera will be used to detect the user's shoes in real-time, providing a simple yet effective method for user recognition and direction estimation. The image stream will be processed externally on our laptop or online on the raspberry pi, where a custom-trained model will identify the location of the shoes in the frame. This information will be translated into the user’s direction relative to the robot and communicated back to the TurtleBot over ROS2, allowing it to adjust its motion accordingly.
+
+LiDAR will be the primary sensor for dynamic obstacle detection, gap-finding, and distance maintenance. It will also help refine the robot’s understanding of the user’s position by correlating the visual direction from the camera with the LiDAR scan to estimate the user’s distance. In cases where the gap-finding algorithm cannot identify a safe path forward, the robot will utilize a prebuilt SLAM map to determine an alternative route around obstacles, ensuring reliable and adaptive navigation in cluttered environments.
 
 ## Preparation Needs
 
 ### What do you need to know to be successful?
-- To use a Nvidia Jetson Nano with a camera and LiDAR
 - Learn to calibrate and operate the hardware like camera, LiDAR, Raspberry Pi
 - Machine learning tools or OpenCV for optimal image processing
 - Data filtering
 - Control Logic and data flow
 
 ### Which of those topics do you need to cover in class?
-- To use a Nvidia Jetson Nano with a camera and LiDAR
 - Data filtering
 - Control Logic and data flow
 
@@ -55,7 +56,7 @@ The depth camera will provide real-time user tracking and recognition data, whic
 Conditions change in any environment. How will your robot handle variability in its environment?
 - Potential environmental variabilities include lighting conditions, the user’s relative direction with respect to the robot, and narrow gaps smaller than the robot’s diameter.
 - Changes in lighting conditions can affect image processing and user recognition accuracy. To address this, more advanced image processing algorithms that are robust to lighting variations will be explored.
-- In scenarios where the robot encounters narrow gaps that are smaller than its diameter, the robot needs predefined behavior. For instance, the robot can either stop or emit a sound to alert the user, ensuring safe navigation without collisions.
+- In scenarios where the robot encounters narrow gaps that are smaller than its diameter, the robot needs predefined behavior. In our case, The robot will use SLAM and mapping as an alternative mean of motion planning.
 - To maintain accurate user tracking during movement, an optimal update rate for user position data will be determined. This will allow the robot to dynamically adjust the LiDAR beam it uses for distance keeping and movement direction correction, ensuring responsive and adaptive following behavior.
 
 ## Testing & Evaluation Plan
