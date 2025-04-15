@@ -362,6 +362,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Interaction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-collection-image-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data collection &amp; Image processing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -562,6 +577,8 @@
 <p>The TurtleBot 4 is equipped with a depth camera, LiDAR, and a Raspberry Pi board, enabling effective interaction and control. Due to the limited field of view of the depth camera and the desire to reduce computational load on the Raspberry Pi, we have adopted shoe detection as a lightweight and focused approach for user identification. A custom-trained model will detect the user's shoes, allowing us to estimate their direction relative to the image center. The image data will be processed externally on a PC or online on the raspberry pi, and the results will be used to guide robot's motion.</p>
 <p>LiDAR will be used for 360-degree obstacle detection and distance maintenance, and will play a central role in real-time gap-finding navigation. In situations where the robot is unable to find a viable local path using the gap-finding algorithm, it will fall back on a pre-built SLAM map to determine an alternative route. This layered approach allows the robot to adapt intelligently to dynamic and complex environments.</p>
 <p><img alt="Interaction" src="/assets/images/IMG_9870.png" title="Interaction between various components" /></p>
+<h3 id="data-collection-image-processing">Data collection &amp; Image processing</h3>
+<p>This project focuses on developing a machine learning model capable of detecting shoes and estimating their position on-screen using an OAK-D camera mounted on a TurtleBot robot. The camera is fixed at a height of 192 mm from the ground, and its field of view has been calibrated to account for perspective distortion, including a measured offset of 180 mm between the camera’s optical center and the center of the captured image. Data collection was performed in a controlled indoor environment to ensure consistency, with the camera mounted on a tripod and a coordinate system marked on the floor to map image coordinates to physical positions. To capture the variability in shoe placement, eight different images were taken at each floor coordinate. Additionally, to teach the model to infer depth, five images were captured at varying distances from a fixed origin for each shoe position. Each image in the dataset is annotated with the shoe's bounding box, its physical distance from the camera, and its relative floor coordinate. As distance increases, both the bounding box size and screen mapping change due to perspective scaling. The proposed machine learning pipeline includes an object detection backbone—such as YOLOv8 or SSD—to identify shoes and predict bounding boxes, followed by a regression-based localization head to estimate the shoe's screen coordinates and, optionally, its physical distance from the camera. The overall methodology consists of several steps: data collection using the calibrated camera setup, preprocessing involving image normalization and augmentation (e.g., rotation and brightness variation), supervised training using annotated labels, rigorous evaluation on unseen environments and lighting conditions, and finally, real-time deployment integrated with the OAK-D camera’s live stream to enable real-time shoe localization on the robot.</p>
 <h2 id="control-and-autonomy">Control and Autonomy</h2>
 <p>The depth camera will be used to detect the user's shoes in real-time, providing a simple yet effective method for user recognition and direction estimation. The image stream will be processed externally on our laptop or online on the raspberry pi, where a custom-trained model will identify the location of the shoes in the frame. This information will be translated into the user’s direction relative to the robot and communicated back to the TurtleBot over ROS2, allowing it to adjust its motion accordingly.</p>
 <p>LiDAR will be the primary sensor for dynamic obstacle detection, gap-finding, and distance maintenance. It will also help refine the robot’s understanding of the user’s position by correlating the visual direction from the camera with the LiDAR scan to estimate the user’s distance. In cases where the gap-finding algorithm cannot identify a safe path forward, the robot will utilize a prebuilt SLAM map to determine an alternative route around obstacles, ensuring reliable and adaptive navigation in cluttered environments.</p>
