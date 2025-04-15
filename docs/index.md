@@ -45,13 +45,13 @@ Data collection was performed in a controlled indoor environment to ensure consi
 To capture the variability in shoe placement, eight different images were taken at each floor coordinate. Additionally, to teach the model to infer depth, five images were captured at varying distances from a fixed origin for each shoe position. Each image in the dataset is annotated with the shoe's bounding box, its physical distance from the camera, and its relative floor coordinate.
 ![Data collection & Image processing](/assets/images/Fig6.png "This provides the model with a rich variety of angles and orientations at a fixed position, improving positional awareness.")
 
-As distance increases, both the bounding box size and screen mapping change due to perspective scaling. The proposed machine learning pipeline includes an object detection backbone—such as YOLOv8 or SSD—to identify shoes and predict bounding boxes, followed by a regression-based localization head to estimate the shoe's  coordinates (x,y) and, optionally, its physical distance from the camera. The overall methodology consists of several steps: data collection using the calibrated camera setup, preprocessing involving image normalization and augmentation (e.g., rotation and brightness variation), supervised training using annotated labels, rigorous evaluation on unseen environments and lighting conditions, and finally, real-time deployment integrated with the OAK-D camera’s live stream to enable real-time shoe localization on the robot.
+As distance increases, both the bounding box size and screen mapping change due to perspective scaling. The proposed machine learning pipeline includes an object detection backbone—such as YOLOv8 or SSD—to identify shoes and predict bounding boxes, followed by a regression-based localization head to estimate the shoe's  coordinates (x,y) and, optionally, its physical distance from the camera. 
 
 ![Data collection & Image processing](/assets/images/Fig7.png " Camera screen layout showing shoe position at 1500mm")
 
 ![Data collection & Image processing](/assets/images/Fig8.png "Distance cues such as shoe size in pixels and placement on the screen will help the model regress distance in addition to screen location.")
 
-
+The overall methodology consists of several steps: data collection using the calibrated camera setup, preprocessing involving image normalization and augmentation (e.g., rotation and brightness variation), supervised training using annotated labels, rigorous evaluation on unseen environments and lighting conditions, and finally, real-time deployment integrated with the OAK-D camera’s live stream to enable real-time shoe localization on the robot.
 
 ## Control and Autonomy
 
@@ -61,12 +61,18 @@ LiDAR will be the primary sensor for dynamic obstacle detection, gap-finding, an
 
 ### Current Progress
 In our previous revision, we introduced the use of SLAM as a secondary navigation method. In this architecture, the robot primarily relies on a reactive gap-finding algorithm for real-time obstacle avoidance. However, in situations where a passable gap cannot be identified, the robot falls back on the SLAM-generated map to make informed navigation decisions.
-While the core logic of our system remains unchanged, we have made several refinements. In the updated setup, a SLAM node runs continuously to map the environment as the robot moves. Once the user’s heading is determined, it is sent as a goal to the Nav2 planner server. This server generates a global path based on the current map. My custom Reactive Gap Finder node, which subscribes to the /rpi_11/plan topic, receives this path, follows it, and performs local obstacle avoidance by identifying and navigating through gaps in the environment.
+While the core logic of our system remains unchanged, we have made several refinements. In the updated setup, a SLAM node runs continuously to map the environment as the robot moves. Once the user’s heading is determined, it is sent as a goal to the Nav2 planner server. This server generates a global path based on the current map. My custom Reactive Gap Finder node, which subscribes to the /rpi_11/plan topic, receives this path, follows it, and performs local obstacle avoidance by identifying and navigating through gaps in the environment.The figures below, which provide a zoomed-in view of the rqt_graph, clearly illustrate this architecture. As shown, the SLAM Toolbox subscribes to the /rpi_11/scan topic to perform mapping and localization. Meanwhile, the FollowerGap_node subscribes to the /rpi_11/plan topic to receive the global path coordinates for local planning.
+
+![Current Progress](/assets/images/Fig9.png "Rqt_graph_SLAM")
+
+![Current Progress](/assets/images/Fig10.png "Rqt_graph_plan")
 
 
 **Current Challenges:**
 
-- **SLAM Integration Issues:** Although our goal was to use the SLAM-generated map for secondary path planning, issues with the `turtlebot4_navigation` package have made this integration difficult. I was able to successfully demonstrate the robot navigating using a map generated from my lab environment (see Figure 1 and the Navigation with Map video), but this success was not consistently reproducible.
+- **SLAM Integration Issues:** Although our goal was to use the SLAM-generated map for secondary path planning, issues with the `turtlebot4_navigation` package have made this integration difficult. I was able to successfully demonstrate the robot navigating using a map generated from my lab environment (see Figure below and the Navigation with Map video), but this success was not consistently reproducible.
+
+![Current Progress](/assets/images/Fig11.png "Map")
 
 - **Obstacle Avoidance Conflicts:** While the Reactive Gap Finder generally performs well, I observed that the robot occasionally collides with obstacles despite significant parameter tuning. This is the primary motivation behind fusing it with the Nav2 dynamic mapping and planning capabilities. However, integration poses a challenge: to avoid conflicting commands, we must isolate the `planner_server` from the full `turtlebot4_navigation` stack. When both the Nav2 controller and my reactive gap logic publish to the `/cmd_vel` topic, the robot receives mixed commands and deviates from the intended path. This behavior is shown in the accompanying demonstration video. Attempts to resolve this by editing the `nav2.yaml` file were unsuccessful.
 
@@ -75,7 +81,10 @@ In case we can not use the nav2 and its planner server, we stick to my Reactive 
 
 ## Graphical User Interface (GUI)
 ### Current Progress:
-In this component of our project, we are simulate a ROS 2 NavigateToPose action server and integrate it with a PyQt5 graphical user interface (GUI) to visualize robot sensor data and navigation status. The action server acts as a dummy implementation that mimics the behavior of the standard NavigateToPose interface in ROS 2. It receives target pose goals from clients, simulates navigation by periodically publishing feedback (e.g., distance remaining), and returns a result upon completion to indicate whether the goal was successfully reached or not. Users can send goals using the ROS 2 command-line interface, specifying the desired position and orientation within the map frame. On the GUI side, we use PyQt5 to create a clean interface that displays LIDAR scan data, camera images, and the current status of the navigation process. The interface includes buttons to trigger visualizations and a status label that reflects the robot’s current state (e.g., Idle, Navigating, Completed). The GUI listens to the GoalStatusArray topic to receive real-time updates on the navigation goal, dynamically showing statuses such as Accepted, In Progress, or Aborted. In the final version, we replace the action server with the robot action server enabling us to monitor the navigation status. Loging buttons and camera will remain as tools for debugging purposes, while Lidar data display might not be needed in the final version. 
+In this component of our project, we are simulating a ROS 2 NavigateToPose action server and integrate it with a PyQt5 graphical user interface (GUI) to visualize robot sensor data and navigation status. The action server acts as a dummy implementation that mimics the behavior of the standard NavigateToPose interface in ROS 2. It receives target pose goals from clients, simulates navigation by periodically publishing feedback (e.g., distance remaining), and returns a result upon completion to indicate whether the goal was successfully reached or not. Users can send goals using the ROS 2 command-line interface, specifying the desired position and orientation within the map frame. On the GUI side, we use PyQt5 to create a clean interface that displays LIDAR scan data, camera images, and the current status of the navigation process. The interface includes buttons to trigger visualizations and a status label that reflects the robot’s current state (e.g., Idle, Navigating, Completed). The GUI listens to the GoalStatusArray topic to receive real-time updates on the navigation goal, dynamically showing statuses such as Accepted, In Progress, or Aborted. In the final version, we replace the action server with the robot action server enabling us to monitor the navigation status. Loging buttons and camera will remain as tools for debugging purposes, while Lidar data display might not be needed in the final version. 
+
+![Current Progress](/assets/images/Fig12.png "GUI")
+
 ## Preparation Needs
 
 ### What do you need to know to be successful?
