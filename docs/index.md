@@ -52,7 +52,9 @@ While the core logic of our system remains unchanged, we have made several refin
 **Potential Final Solution:**
 In case we can not use the nav2 and its planner server, we stick to my Reactive gap finder and we make sure to use the gaps that are in the direction of user. 
 
-
+## Graphical User Interface (GUI)
+### Current Progress:
+In this component of our project, we are simulate a ROS 2 NavigateToPose action server and integrate it with a PyQt5 graphical user interface (GUI) to visualize robot sensor data and navigation status. The action server acts as a dummy implementation that mimics the behavior of the standard NavigateToPose interface in ROS 2. It receives target pose goals from clients, simulates navigation by periodically publishing feedback (e.g., distance remaining), and returns a result upon completion to indicate whether the goal was successfully reached or not. Users can send goals using the ROS 2 command-line interface, specifying the desired position and orientation within the map frame. On the GUI side, we use PyQt5 to create a clean interface that displays LIDAR scan data, camera images, and the current status of the navigation process. The interface includes buttons to trigger visualizations and a status label that reflects the robot’s current state (e.g., Idle, Navigating, Completed). The GUI listens to the GoalStatusArray topic to receive real-time updates on the navigation goal, dynamically showing statuses such as Accepted, In Progress, or Aborted. In the final version, we replace the action server with the robot action server enabling us to monitor the navigation status. Loging buttons and camera will remain as tools for debugging purposes, while Lidar data display might not be needed in the final version. 
 ## Preparation Needs
 
 ### What do you need to know to be successful?
