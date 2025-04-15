@@ -40,7 +40,7 @@ To detect and localize shoes we focuse on developing a machine learning model ca
 
 Data collection was performed in a controlled indoor environment to ensure consistency, with the camera mounted on a tripod and a coordinate system marked on the floor to map image coordinates to physical positions as shown below.
 
-![Data collection & Image processing](/assets/images/Fig5.png "The current dataset covers only one lighting and environmental condition. For better generalization, future datasets will include varying lighting and scene conditions.")
+![Data collection & Image processing](/assets/images/Fig5.jpg "The current dataset covers only one lighting and environmental condition. For better generalization, future datasets will include varying lighting and scene conditions.")
 
 To capture the variability in shoe placement, eight different images were taken at each floor coordinate. Additionally, to teach the model to infer depth, five images were captured at varying distances from a fixed origin for each shoe position. Each image in the dataset is annotated with the shoe's bounding box, its physical distance from the camera, and its relative floor coordinate.
 ![Data collection & Image processing](/assets/images/Fig6.png "This provides the model with a rich variety of angles and orientations at a fixed position, improving positional awareness.")
