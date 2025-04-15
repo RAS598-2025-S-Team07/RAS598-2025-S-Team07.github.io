@@ -38,6 +38,19 @@ The depth camera will be used to detect the user's shoes in real-time, providing
 
 LiDAR will be the primary sensor for dynamic obstacle detection, gap-finding, and distance maintenance. It will also help refine the robot’s understanding of the user’s position by correlating the visual direction from the camera with the LiDAR scan to estimate the user’s distance. In cases where the gap-finding algorithm cannot identify a safe path forward, the robot will utilize a prebuilt SLAM map to determine an alternative route around obstacles, ensuring reliable and adaptive navigation in cluttered environments.
 
+### Current Progress
+In our previous revision, we introduced the use of SLAM as a secondary navigation method. In this architecture, the robot primarily relies on a reactive gap-finding algorithm for real-time obstacle avoidance. However, in situations where a passable gap cannot be identified, the robot falls back on the SLAM-generated map to make informed navigation decisions.
+While the core logic of our system remains unchanged, we have made several refinements. In the updated setup, a SLAM node runs continuously to map the environment as the robot moves. Once the user’s heading is determined, it is sent as a goal to the Nav2 planner server. This server generates a global path based on the current map. My custom Reactive Gap Finder node, which subscribes to the /rpi_11/plan topic, receives this path, follows it, and performs local obstacle avoidance by identifying and navigating through gaps in the environment.
+
+
+**Current Challenges:**
+
+- **SLAM Integration Issues:** Although our goal was to use the SLAM-generated map for secondary path planning, issues with the `turtlebot4_navigation` package have made this integration difficult. I was able to successfully demonstrate the robot navigating using a map generated from my lab environment (see Figure 1 and the Navigation with Map video), but this success was not consistently reproducible.
+
+- **Obstacle Avoidance Conflicts:** While the Reactive Gap Finder generally performs well, I observed that the robot occasionally collides with obstacles despite significant parameter tuning. This is the primary motivation behind fusing it with the Nav2 dynamic mapping and planning capabilities. However, integration poses a challenge: to avoid conflicting commands, we must isolate the `planner_server` from the full `turtlebot4_navigation` stack. When both the Nav2 controller and my reactive gap logic publish to the `/cmd_vel` topic, the robot receives mixed commands and deviates from the intended path. This behavior is shown in the accompanying demonstration video. Attempts to resolve this by editing the `nav2.yaml` file were unsuccessful.
+
+
+
 ## Preparation Needs
 
 ### What do you need to know to be successful?
