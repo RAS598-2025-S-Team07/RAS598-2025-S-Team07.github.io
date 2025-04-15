@@ -49,6 +49,8 @@ While the core logic of our system remains unchanged, we have made several refin
 
 - **Obstacle Avoidance Conflicts:** While the Reactive Gap Finder generally performs well, I observed that the robot occasionally collides with obstacles despite significant parameter tuning. This is the primary motivation behind fusing it with the Nav2 dynamic mapping and planning capabilities. However, integration poses a challenge: to avoid conflicting commands, we must isolate the `planner_server` from the full `turtlebot4_navigation` stack. When both the Nav2 controller and my reactive gap logic publish to the `/cmd_vel` topic, the robot receives mixed commands and deviates from the intended path. This behavior is shown in the accompanying demonstration video. Attempts to resolve this by editing the `nav2.yaml` file were unsuccessful.
 
+**Potential Final Solution:**
+In case we can not use the nav2 and its planner server, we stick to my Reactive gap finder and we make sure to use the gaps that are in the direction of user. 
 
 
 ## Preparation Needs
