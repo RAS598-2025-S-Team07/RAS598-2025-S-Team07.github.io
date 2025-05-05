@@ -33,9 +33,11 @@ Beyond obstacle avoidance, LiDAR can also be leveraged to maintain an optimal fo
 
 ## Interaction
 
-The TurtleBot 4 is equipped with a depth camera, LiDAR, and a Raspberry Pi board, enabling effective interaction and control. Due to the limited field of view of the depth camera and the desire to reduce computational load on the Raspberry Pi, we have adopted shoe detection as a lightweight and focused approach for user identification. A custom-trained model will detect the user's shoes, allowing us to estimate their direction relative to the image center. The image data will be processed externally on a PC or online on the raspberry pi, and the results will be used to guide robot's motion.
+The TurtleBot 4 is equipped with a depth camera, LiDAR, and a Raspberry Pi, enabling effective sensing, interaction, and control. Due to the limited field of view of the depth camera and the computational constraints of the onboard Raspberry Pi, we adopted a lightweight user identification strategy based on shoe detection. A custom-trained model detects and localizes the user's shoes to estimate both the direction and distance of the user relative to the robot.
 
-LiDAR will be used for 360-degree obstacle detection and distance maintenance, and will play a central role in real-time gap-finding navigation. In situations where the robot is unable to find a viable local path using the gap-finding algorithm, it will fall back on a pre-built SLAM map to determine an alternative route. This layered approach allows the robot to adapt intelligently to dynamic and complex environments.
+Our original design envisioned a hybrid navigation framework in which the LiDAR would provide 360-degree obstacle detection, assist in maintaining a safe following distance, and enable real-time gap-finding for navigation. In scenarios where no viable local path was identified through the gap-finding algorithm, the robot would fall back on a SLAM-based approach using the Nav2 stack to generate a local map and plan an alternative route. This layered architecture was intended to allow the robot to adapt intelligently to complex, dynamic environments.
+
+However, due to persistent integration challenges with SLAM, Nav2, and the custom gap-finding algorithm, we revised our approach. The final implementation relies solely on local path planning, obstacle avoidance, and user direction input via shoe detection. In this setup, the robot receives the estimated direction of the user and initiates motion toward that direction using the gap-finding algorithm, while simultaneously maintaining environmental awareness and avoiding dynamic obstacles.
 
 ![Interaction](/assets/images/IMG_9870.png "Interaction between various components")
 
