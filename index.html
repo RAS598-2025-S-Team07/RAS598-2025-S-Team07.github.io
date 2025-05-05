@@ -399,6 +399,33 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#real-time-inference-with-depthai-and-oak-d-camera" class="md-nav__link">
+    <span class="md-ellipsis">
+      Real-Time Inference with DepthAI and OAK-D Camera
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Output
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-functionalities-of-shoe_predictor_nodepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Functionalities of shoe_predictor_node.py:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#current-progress" class="md-nav__link">
     <span class="md-ellipsis">
       Current Progress
@@ -604,8 +631,47 @@
 <p>To train the shoe detection and localization model, we first structured the dataset properly. The dataset directory includes a .csv annotation file, a folder containing all labeled images, and the Python training script. Each image in the dataset is labeled with normalized x-offset, z-distance from the camera, and orientation angle. A total of four values are regressed by the model.</p>
 <p>We used a lightweight pretrained convolutional neural network—ResNet18—as the backbone for the regression task. Its final fully connected layer was modified to output four continuous values corresponding to the shoe’s location and orientation. The model was trained using PyTorch, with data augmentation (such as rotations) to improve generalization. The model was trained using the Mean Squared Error (MSE) loss function and optimized with Adam. After training, the model was saved in a .pth file for later use in real-time inference.</p>
 <h2 id="control-and-autonomy">Control and Autonomy</h2>
-<p>The depth camera will be used to detect the user's shoes in real-time, providing a simple yet effective method for user recognition and direction estimation. The image stream will be processed externally on our laptop or online on the raspberry pi, where a custom-trained model will identify the location of the shoes in the frame. This information will be translated into the user’s direction relative to the robot and communicated back to the TurtleBot over ROS2, allowing it to adjust its motion accordingly.</p>
-<p>LiDAR will be the primary sensor for dynamic obstacle detection, gap-finding, and distance maintenance. It will also help refine the robot’s understanding of the user’s position by correlating the visual direction from the camera with the LiDAR scan to estimate the user’s distance. In cases where the gap-finding algorithm cannot identify a safe path forward, the robot will utilize a prebuilt SLAM map to determine an alternative route around obstacles, ensuring reliable and adaptive navigation in cluttered environments.</p>
+<h3 id="real-time-inference-with-depthai-and-oak-d-camera">Real-Time Inference with DepthAI and OAK-D Camera</h3>
+<p>The trained model is loaded and executed in real time using the OAK-D camera with DepthAI. The rgb_stereo launch file from the depthai_ros_driver package initializes the camera and publishes the RGB and stereo image streams to ROS 2 topics. These streams can be subscribed to for real-time image processing and pose estimation.
+Our custom ROS 2 node, shoe_predictor_node.py, performs the complete inference pipeline and publishes the estimated user direction and position. This data is used by the TurtleBot to adjust its motion accordingly, enabling dynamic following behavior.</p>
+<h3 id="model-output">Model Output</h3>
+<ul>
+<li>
+<p>The trained model outputs four continuous values:</p>
+</li>
+<li>
+<p>Normalized x-offset (horizontal displacement of the shoe)</p>
+</li>
+<li>
+<p>Normalized z-distance (depth from the camera)</p>
+</li>
+<li>
+<p>Orientation angle (to estimate user heading)</p>
+</li>
+</ul>
+<p>These values are processed to compute the user’s position relative to the robot and are published over ROS 2 for integration into the robot's control loop.</p>
+<h3 id="key-functionalities-of-shoe_predictor_nodepy">Key Functionalities of shoe_predictor_node.py:</h3>
+<ul>
+<li>
+<p>Image Subscription: Subscribes to the RGBD stream published by the OAK-D.</p>
+</li>
+<li>
+<p>Model Inference: Loads the pre-trained ResNet18 model to detect and locate the user's shoes in the image.</p>
+</li>
+<li>
+<p>Preprocessing: Converts incoming ROS image messages to OpenCV format using cv_bridge, resizes and normalizes the image to match the training format.</p>
+</li>
+<li>
+<p>Prediction Processing: Uses model outputs to infer the user's relative direction, distance, and orientation.</p>
+</li>
+<li>
+<p>Publishing: Sends estimated user relative direction to robot to the /rpi_11/user_position topic.</p>
+</li>
+<li>
+<p>Error Handling: Logs issues during image conversion or inference to ensure robustness.</p>
+</li>
+</ul>
+<p>This architecture enables frame-by-frame estimation of the user's shoe location and orientation in real time. Thanks to the lightweight nature of the ResNet18 model and efficient inference pipeline, this system is well-suited for deployment on resource-constrained platforms like the Raspberry Pi</p>
 <h3 id="current-progress">Current Progress</h3>
 <p>In our previous revision, we introduced the use of SLAM as a secondary navigation method. In this architecture, the robot primarily relies on a reactive gap-finding algorithm for real-time obstacle avoidance. However, in situations where a passable gap cannot be identified, the robot falls back on the SLAM-generated map to make informed navigation decisions.
 While the core logic of our system remains unchanged, we have made several refinements. In the updated setup, a SLAM node runs continuously to map the environment as the robot moves. Once the user’s heading is determined, it is sent as a goal to the Nav2 planner server. This server generates a global path based on the current map. My custom Reactive Gap Finder node, which subscribes to the /rpi_11/plan topic, receives this path, follows it, and performs local obstacle avoidance by identifying and navigating through gaps in the environment.The figures below, which provide a zoomed-in view of the rqt_graph, clearly illustrate this architecture. As shown, the SLAM Toolbox subscribes to the /rpi_11/scan topic to perform mapping and localization. Meanwhile, the FollowerGap_node subscribes to the /rpi_11/plan topic to receive the global path coordinates for local planning.</p>
