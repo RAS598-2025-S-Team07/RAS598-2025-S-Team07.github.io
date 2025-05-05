@@ -25,7 +25,9 @@ While the initial project vision included more ambitious capabilities—such as 
 
 ## Sensor Integration
 
-The assistive follower robot will utilize a combination of the depth camera and LiDAR to achieve robust user tracking and situational awareness. The depth camera will be used for user recognition and tracking, while LiDAR will be used to ensure the robot maintains an optimal following distance. Additionally, LiDAR can be used for 360-degree obstacle detection and environmental mapping, allowing the robot to navigate dynamically changing environments safely.
+The assistive follower robot integrates both a depth camera and LiDAR to enable robust user tracking and situational awareness. The depth camera is primarily responsible for user recognition and tracking, while the LiDAR sensor is used for obstacle detection and environmental mapping. This combination allows the robot to navigate safely through dynamically changing environments.
+
+Beyond obstacle avoidance, LiDAR can also be leveraged to maintain an optimal following distance. Once the user's direction relative to the robot is known—typically provided by the depth camera—the robot can associate this direction with a corresponding LiDAR beam and monitor its distance reading. Although this feature has not yet been implemented, it presents a promising opportunity to enhance the robot's control behavior and responsiveness in future iterations.
 
 ![Sensor Integration](/assets/images/IMG_9871.PNG "Sensor Integration")
 
