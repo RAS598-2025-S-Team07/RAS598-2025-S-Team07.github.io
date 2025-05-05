@@ -14,7 +14,7 @@
       
       
       <link rel="icon" href="static/logo.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.11">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
     
     
       
@@ -22,7 +22,7 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.4af4bdda.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.2afb09e1.min.css">
       
         
         <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-the-multipurpose-macro-load-bearing-assistive-follower-robot-project" class="md-skip">
+        <a href="#multipurpose-macro-load-bearing-assistive-follower-robot-project" class="md-skip">
           Skip to content
         </a>
       
@@ -105,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Welcome to the Multipurpose Macro Load Bearing Assistive Follower Robot Project
+              Multipurpose Macro Load Bearing Assistive Follower Robot Project
             
           </span>
         </div>
@@ -557,7 +557,7 @@
   
 
 
-<h1 id="welcome-to-the-multipurpose-macro-load-bearing-assistive-follower-robot-project">Welcome to the Multipurpose Macro Load Bearing Assistive Follower Robot Project</h1>
+<h1 id="multipurpose-macro-load-bearing-assistive-follower-robot-project">Multipurpose Macro Load Bearing Assistive Follower Robot Project</h1>
 <p><strong>Team:</strong> 07<br />
 <strong>Course:</strong> RAS 598 Experimentation and Deployment of Robotic Systems, Arizona State University</p>
 <h2 id="team-members">Team Members</h2>
@@ -568,7 +568,9 @@
 <h3 id="shashank-sing-deo">Shashank Sing Deo</h3>
 <p>B.Tech in Mechanical Engineering, worked as systems and integration engineer with Evage motors designing N1 and M3 category vehicles for Indian, Middle east and European markets.</p>
 <h2 id="introduction">Introduction</h2>
-<p>This project seeks to explore how a mobile robotic system can effectively follow and assist a user while maintaining situational awareness through obstacle detection and user recognition. Specifically, we aim to develop a follower robot using a TurtleBot equipped with a depth camera and Lidar. This system will enable hands-free transportation of small items (e.g., groceries, shopping bags, or tools) and assist with tasks like carrying a camera for photography or videography. Through this research, we hope to contribute to the advancement and normalization of Assistive Robots Technology in everyday life.</p>
+<p>This project investigates how a mobile robot can effectively follow and assist a user while maintaining situational awareness through obstacle avoidance and user recognition. Specifically, we focus on developing an assistive follower robot using a TurtleBot 4 platform equipped with a depth camera and LiDAR. The system is designed to enable hands-free transportation of small items—such as groceries, shopping bags, or tools—and assist in tasks like carrying a camera for photography or videography. Our broader objective is to contribute to the development and normalization of assistive robotic technologies in everyday life.</p>
+<p>To operate effectively in real-world environments, the robot must support key features including global and local path planning, dynamic obstacle avoidance (e.g., navigating around moving pedestrians), and user-specific tracking to differentiate its intended user from others in the environment.</p>
+<p>While the initial project vision included more ambitious capabilities—such as allowing the robot to lead the user, full SLAM integration, and advanced navigation using a gap-finding algorithm—hardware limitations (notably issues with the depth camera and the turtlebot4_navigation package) led us to revise the project's scope. The final implementation focuses on local path planning, obstacle avoidance, and user's shoe detection as a mean for user localization. These features, along with the rationale for our design decisions, are detailed in the following sections.</p>
 <p><img alt="Project Idea" src="/assets/images/IMG_9859.PNG" title="functional depiction of the idea" /></p>
 <h2 id="sensor-integration">Sensor Integration</h2>
 <p>The assistive follower robot will utilize a combination of the depth camera and LiDAR to achieve robust user tracking and situational awareness. The depth camera will be used for user recognition and tracking, while LiDAR will be used to ensure the robot maintains an optimal following distance. Additionally, LiDAR can be used for 360-degree obstacle detection and environmental mapping, allowing the robot to navigate dynamically changing environments safely.</p>
