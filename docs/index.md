@@ -1,4 +1,4 @@
-# Welcome to the Multipurpose Macro Load Bearing Assistive Follower Robot Project
+# Multipurpose Macro Load Bearing Assistive Follower Robot Project
 
 **Team:** 07  
 **Course:** RAS 598 Experimentation and Deployment of Robotic Systems, Arizona State University
@@ -15,7 +15,11 @@ Robotics and autonomous systems PhD student specializing in designing Bio-inspir
 B.Tech in Mechanical Engineering, worked as systems and integration engineer with Evage motors designing N1 and M3 category vehicles for Indian, Middle east and European markets.
 
 ## Introduction
-This project seeks to explore how a mobile robotic system can effectively follow and assist a user while maintaining situational awareness through obstacle detection and user recognition. Specifically, we aim to develop a follower robot using a TurtleBot equipped with a depth camera and Lidar. This system will enable hands-free transportation of small items (e.g., groceries, shopping bags, or tools) and assist with tasks like carrying a camera for photography or videography. Through this research, we hope to contribute to the advancement and normalization of Assistive Robots Technology in everyday life.
+This project investigates how a mobile robot can effectively follow and assist a user while maintaining situational awareness through obstacle avoidance and user recognition. Specifically, we focus on developing an assistive follower robot using a TurtleBot 4 platform equipped with a depth camera and LiDAR. The system is designed to enable hands-free transportation of small items—such as groceries, shopping bags, or tools—and assist in tasks like carrying a camera for photography or videography. Our broader objective is to contribute to the development and normalization of assistive robotic technologies in everyday life.
+
+To operate effectively in real-world environments, the robot must support key features including global and local path planning, dynamic obstacle avoidance (e.g., navigating around moving pedestrians), and user-specific tracking to differentiate its intended user from others in the environment.
+
+While the initial project vision included more ambitious capabilities—such as allowing the robot to lead the user, full SLAM integration, and advanced navigation using a gap-finding algorithm—hardware limitations (notably issues with the depth camera and the turtlebot4_navigation package) led us to revise the project's scope. The final implementation focuses on local path planning, obstacle avoidance, and user's shoe detection as a mean for user localization. These features, along with the rationale for our design decisions, are detailed in the following sections.
 
 ![Project Idea](/assets/images/IMG_9859.PNG "functional depiction of the idea")
 
