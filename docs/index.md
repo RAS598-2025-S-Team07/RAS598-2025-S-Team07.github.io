@@ -46,20 +46,26 @@ To detect and localize shoes we focuse on developing a machine learning model ca
 
 ![Data collection & Image processing](/assets/images/Fig4.png "The captured image was analyzed to map the full viewing area and determine the region where the shoe is most accurately represented on the screen.")
 
-Data collection was performed in a controlled indoor environment to ensure consistency, with the camera mounted on a tripod and a coordinate system marked on the floor to map image coordinates to physical positions as shown below.
+Data collection was performed in a controlled indoor environment and classropm to ensure consistency, with the camera mounted on a tripod and a coordinate system marked on the floor to map image coordinates to physical positions as shown below.
 
 ![Data collection & Image processing](/assets/images/Fig5.jpg "The current dataset covers only one lighting and environmental condition. For better generalization, future datasets will include varying lighting and scene conditions.")
 
-To capture the variability in shoe placement, eight different images were taken at each floor coordinate. Additionally, to teach the model to infer depth, five images were captured at varying distances from a fixed origin for each shoe position. Each image in the dataset is annotated with the shoe's bounding box, its physical distance from the camera, and its relative floor coordinate.
+To capture the variability in shoe placement, eight different images were taken at each floor coordinate. Additionally, to teach the model to infer depth, five images were captured at varying distances from a fixed origin for each shoe position. Each image in the dataset is annotated with the shoe's bounding box, its physical distance from the camera, and its relative floor coordinate. Data labeling was performed using the free and open-source software LabelMe, which allowed us to annotate each image with the shoe’s horizontal offset (x), distance from the camera (z), and orientation angle. The labeling convention we followed is illustrated in the figure below.
+
 ![Data collection & Image processing](/assets/images/Fig6.png "This provides the model with a rich variety of angles and orientations at a fixed position, improving positional awareness.")
 
-As distance increases, both the bounding box size and screen mapping change due to perspective scaling. The proposed machine learning pipeline includes an object detection backbone—such as YOLOv8 or SSD—to identify shoes and predict bounding boxes, followed by a regression-based localization head to estimate the shoe's  coordinates (x,y) and, optionally, its physical distance from the camera. 
+As distance increases, both the bounding box size and screen mapping change due to perspective scaling. The proposed machine learning pipeline includes an object detection backbone—ResNet18—to identify the shoes and estimate the user’s direction and distance.
+
+
 
 ![Data collection & Image processing](/assets/images/Fig7.png " Camera screen layout showing shoe position at 1500mm")
 
 ![Data collection & Image processing](/assets/images/Fig8.png "Distance cues such as shoe size in pixels and placement on the screen will help the model regress distance in addition to screen location.")
 
-The overall methodology consists of several steps: data collection using the calibrated camera setup, preprocessing involving image normalization and augmentation (e.g., rotation and brightness variation), supervised training using annotated labels, rigorous evaluation on unseen environments and lighting conditions, and finally, real-time deployment integrated with the OAK-D camera’s live stream to enable real-time shoe localization on the robot.
+### Shoe Detection Model: Training and Inference
+To train the shoe detection and localization model, we first structured the dataset properly. The dataset directory includes a .csv annotation file, a folder containing all labeled images, and the Python training script. Each image in the dataset is labeled with normalized x-offset, z-distance from the camera, and orientation angle. A total of four values are regressed by the model.
+
+We used a lightweight pretrained convolutional neural network—ResNet18—as the backbone for the regression task. Its final fully connected layer was modified to output four continuous values corresponding to the shoe’s location and orientation. The model was trained using PyTorch, with data augmentation (such as rotations) to improve generalization. The model was trained using the Mean Squared Error (MSE) loss function and optimized with Adam. After training, the model was saved in a .pth file for later use in real-time inference.
 
 ## Control and Autonomy
 
