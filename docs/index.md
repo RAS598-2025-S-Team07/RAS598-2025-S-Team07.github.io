@@ -69,9 +69,36 @@ We used a lightweight pretrained convolutional neural network—ResNet18—as th
 
 ## Control and Autonomy
 
-The depth camera will be used to detect the user's shoes in real-time, providing a simple yet effective method for user recognition and direction estimation. The image stream will be processed externally on our laptop or online on the raspberry pi, where a custom-trained model will identify the location of the shoes in the frame. This information will be translated into the user’s direction relative to the robot and communicated back to the TurtleBot over ROS2, allowing it to adjust its motion accordingly.
+### Real-Time Inference with DepthAI and OAK-D Camera
+The trained model is loaded and executed in real time using the OAK-D camera with DepthAI. The rgb_stereo launch file from the depthai_ros_driver package initializes the camera and publishes the RGB and stereo image streams to ROS 2 topics. These streams can be subscribed to for real-time image processing and pose estimation.
+Our custom ROS 2 node, shoe_predictor_node.py, performs the complete inference pipeline and publishes the estimated user direction and position. This data is used by the TurtleBot to adjust its motion accordingly, enabling dynamic following behavior.
 
-LiDAR will be the primary sensor for dynamic obstacle detection, gap-finding, and distance maintenance. It will also help refine the robot’s understanding of the user’s position by correlating the visual direction from the camera with the LiDAR scan to estimate the user’s distance. In cases where the gap-finding algorithm cannot identify a safe path forward, the robot will utilize a prebuilt SLAM map to determine an alternative route around obstacles, ensuring reliable and adaptive navigation in cluttered environments.
+### Model Output
+- The trained model outputs four continuous values:
+
+- Normalized x-offset (horizontal displacement of the shoe)
+
+- Normalized z-distance (depth from the camera)
+
+- Orientation angle (to estimate user heading)
+
+These values are processed to compute the user’s position relative to the robot and are published over ROS 2 for integration into the robot's control loop.
+
+### Key Functionalities of shoe_predictor_node.py:
+- Image Subscription: Subscribes to the RGBD stream published by the OAK-D.
+
+- Model Inference: Loads the pre-trained ResNet18 model to detect and locate the user's shoes in the image.
+
+- Preprocessing: Converts incoming ROS image messages to OpenCV format using cv_bridge, resizes and normalizes the image to match the training format.
+
+- Prediction Processing: Uses model outputs to infer the user's relative direction, distance, and orientation.
+
+- Publishing: Sends estimated user relative direction to robot to the /rpi_11/user_position topic.
+
+- Error Handling: Logs issues during image conversion or inference to ensure robustness.
+
+This architecture enables frame-by-frame estimation of the user's shoe location and orientation in real time. Thanks to the lightweight nature of the ResNet18 model and efficient inference pipeline, this system is well-suited for deployment on resource-constrained platforms like the Raspberry Pi
+
 
 ### Current Progress
 In our previous revision, we introduced the use of SLAM as a secondary navigation method. In this architecture, the robot primarily relies on a reactive gap-finding algorithm for real-time obstacle avoidance. However, in situations where a passable gap cannot be identified, the robot falls back on the SLAM-generated map to make informed navigation decisions.
