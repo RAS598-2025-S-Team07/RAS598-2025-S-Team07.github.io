@@ -383,6 +383,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataset
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -658,6 +667,8 @@ As distance increases, both the bounding box size and screen mapping change due 
 <h3 id="shoe-detection-model-training-and-inference">Shoe Detection Model: Training and Inference</h3>
 <p>To train the shoe detection and localization model, we first structured the dataset properly. The dataset directory includes a .csv annotation file, a folder containing all labeled images, and the Python training script. Each image in the dataset is labeled with normalized x-offset, z-distance from the camera, and orientation angle. A total of four values are regressed by the model.</p>
 <p>We used a lightweight pretrained convolutional neural network—ResNet18—as the backbone for the regression task. Its final fully connected layer was modified to output four continuous values corresponding to the shoe’s location and orientation. The model was trained using PyTorch, with data augmentation (such as rotations) to improve generalization. The model was trained using the Mean Squared Error (MSE) loss function and optimized with Adam. After training, the model was saved in a .pth file for later use in real-time inference.</p>
+<h3 id="dataset">Dataset</h3>
+<p>Training data can be found <a href="https://drive.google.com/drive/folders/1v7vROEMcWfl_1NK7swpMpQlZ9D_5i1I-?usp=drive_link">here</a>.</p>
 <h2 id="control-and-autonomy">Control and Autonomy</h2>
 <p>This section outlines the core components of the robot’s autonomous behavior. We begin by describing the real-time inference method used to estimate the user's heading direction. Next, we detail the navigation and motion control strategies employed to guide the robot’s movement. Finally, we present the finalized ROS 2 architecture that integrates these components into a cohesive and functional system.</p>
 <h3 id="real-time-inference-with-depthai-and-oak-d-camera">Real-Time Inference with DepthAI and OAK-D Camera</h3>
