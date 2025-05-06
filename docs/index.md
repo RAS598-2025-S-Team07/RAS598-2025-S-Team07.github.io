@@ -126,7 +126,7 @@ Despite several attempts, we were unable to consistently obtain the necessary TF
 
 **Proposed Solutions and Workarounds**
 
-1. Resolving "Full Queue" Errors and Dropped TF Messages
+**1. Resolving "Full Queue" Errors and Dropped TF Messages**
 A common error we encountered involved message queues filling up and dropped TF messages. A practical solution was to remap TF topics explicitly:
 /tf := /rpi_11/tf  
 /tf_static := /rpi_11/tf_static
@@ -140,10 +140,10 @@ This remapping became necessary after I noticed an error message pop up when I c
 
 These remappings became essential after noticing incorrect defaults like /tf:=tf, which had no effect. Since these remappings are often hardcoded into launch files, they must be edited directly and cannot be passed as standard ROS 2 arguments.
 
-2- Editing Configuration Files
+**2- Editing Configuration Files**
 In /opt/ros/humble/share/turtlebot4_navigation/config, YAML files define parameters for SLAM, localization, and the Nav2 stack. We experimented with editing these files to disable or replace certain components—such as removing the default planner server in favor of our own. However, doing so led to system instability, likely due to additional internal dependencies that were not updated accordingly. This highlights the tight coupling between components in the Nav2 stack.
 
-3- TFs Not Displaying with view_frames
+**3- TFs Not Displaying with view_frames**
 
 Tools like view_frames from tf2_tools do not automatically account for namespaced TF topics. To visualize the full TF tree correctly, remapping is required at runtime:
 
@@ -153,7 +153,8 @@ ros2 run tf2_tools view_frames                             \
 
 After applying this, the TF tree was successfully generated and frames.pdf showed all expected transforms.
 
-4- Using TFs in Custom Nodes
+**4- Using TFs in Custom Nodes**
+
 When using custom ROS 2 nodes that rely on TF data (e.g., for localization or planning), it is essential to launch them with the appropriate TF remappings. For example:
 
 ros2 run my_nodes tiny_astar_planner \
