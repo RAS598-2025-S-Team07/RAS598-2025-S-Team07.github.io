@@ -109,7 +109,7 @@ Initially, we introduced the use of SLAM as a secondary navigation method. In th
 
 From here, we present the key challenges encountered throughout the project, the custom solutions we implemented to address them, and the lessons learned during system integration and testing. This retrospective highlights both the technical hurdles we faced—such as SLAM, conflicting control inputs, and TF management—and the strategies we adopted to overcome them, including remapping, custom planner development, and refined system architecture.
 
-** Challenges, Custom Development, and Solutions
+**Challenges, Custom Development, and Solutions**
 
 - **SLAM Integration Issues:**
 One of our original objectives was to use SLAM-generated maps for enhanced path planning and localization. While we successfully demonstrated navigation using maps created in a controlled lab setting (see Figure and accompanying Navigation with Map video), this success was inconsistent and difficult to reproduce reliably. The core issues stemmed from turtlebot4_navigation package.
