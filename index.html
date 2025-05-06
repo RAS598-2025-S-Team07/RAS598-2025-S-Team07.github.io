@@ -434,6 +434,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#challenges-custom-development-and-solutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Challenges, Custom Development, and Solutions
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -676,18 +685,22 @@ Our custom ROS 2 node, shoe_predictor_node.py, performs the complete inference p
 <p><img alt="Current Progress" src="/assets/images/Fig9.png" title="Rqt_graph_SLAM" /></p>
 <p><img alt="Current Progress" src="/assets/images/Fig10.png" title="Rqt_graph_plan" /></p>
 <p>From here, we present the key challenges encountered throughout the project, the custom solutions we implemented to address them, and the lessons learned during system integration and testing. This retrospective highlights both the technical hurdles we faced—such as SLAM, conflicting control inputs, and TF management—and the strategies we adopted to overcome them, including remapping, custom planner development, and refined system architecture.</p>
-<p><strong>Challenges, Custom Development, and Solutions</strong></p>
+<h3 id="challenges-custom-development-and-solutions">Challenges, Custom Development, and Solutions</h3>
 <ul>
 <li><strong>SLAM Integration Issues:</strong>
 One of our original objectives was to use SLAM-generated maps for enhanced path planning and localization. While we successfully demonstrated navigation using maps created in a controlled lab setting (see Figure and accompanying Navigation with Map video), this success was inconsistent and difficult to reproduce reliably. The core issues stemmed from turtlebot4_navigation package.</li>
 </ul>
 <p><img alt="Current Progress" src="/assets/images/Fig11.png" title="Map" /></p>
 <ul>
-<li><strong>Obstacle Avoidance Conflicts:</strong>
-The Reactive Gap Finder generally performed well in local navigation. However, occasional collisions with obstacles persisted, despite extensive parameter tuning. To mitigate this, we attempted to combine gap-based obstacle avoidance with Nav2’s dynamic mapping and planning features. Integration proved difficult due to command conflicts: both the Nav2 controller and our custom node were publishing velocity commands to the /cmd_vel topic simultaneously, resulting in erratic behavior and deviations from the intended path. Attempts to resolve this by modifying the nav2.yaml configuration file were unsuccessful, as demonstrated in our test video.</li>
-</ul>
+<li>
+<p><strong>Obstacle Avoidance Conflicts:</strong>
+The Reactive Gap Finder generally performed well in local navigation. However, occasional collisions with obstacles persisted, despite extensive parameter tuning. To mitigate this, we attempted to combine gap-based obstacle avoidance with Nav2’s dynamic mapping and planning features. Integration proved difficult due to command conflicts: both the Nav2 controller and our custom node were publishing velocity commands to the /cmd_vel topic simultaneously, resulting in erratic behavior and deviations from the intended path. Attempts to resolve this by modifying the nav2.yaml configuration file were unsuccessful, as demonstrated in our test video.</p>
+</li>
+<li>
 <p><strong>Custom Development:</strong>
 To overcome dependencies on the Nav2 stack, we explored a fully custom approach by developing a lightweight A* planner. This planner receives the estimated user position and direction as a goal and generates a corresponding trajectory. However, for this approach to be fully functional, proper access to the robot’s coordinate frames (TFs) is essential.</p>
+</li>
+</ul>
 <p>Despite several attempts, we were unable to consistently obtain the necessary TFs (e.g., odom, base_link, map) within our custom node. The node was only able to access the map frame, and transformations between key frames were missing. As a result, although the robot could localize itself in the map frame, the lack of proper frame transformations caused it to deviate from the generated path as illustrated in our test video.</p>
 <p><strong>Proposed Solutions and Workarounds</strong></p>
 <p><strong>1. Resolving "Full Queue" Errors and Dropped TF Messages</strong></p>
