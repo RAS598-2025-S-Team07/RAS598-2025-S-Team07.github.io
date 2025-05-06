@@ -689,27 +689,25 @@ The Reactive Gap Finder generally performed well in local navigation. However, o
 To overcome dependencies on the Nav2 stack, we explored a fully custom approach by developing a lightweight A* planner. This planner receives the estimated user position and direction as a goal and generates a corresponding trajectory. However, for this approach to be fully functional, proper access to the robot’s coordinate frames (TFs) is essential.</p>
 <p>Despite several attempts, we were unable to consistently obtain the necessary TFs (e.g., odom, base_link, map) within our custom node. The node was only able to access the map frame, and transformations between key frames were missing. As a result, although the robot could localize itself in the map frame, the lack of proper frame transformations caused it to deviate from the generated path as illustrated in our test video.</p>
 <p><strong>Proposed Solutions and Workarounds</strong></p>
-<ol>
-<li>Resolving "Full Queue" Errors and Dropped TF Messages
+<p><strong>1. Resolving "Full Queue" Errors and Dropped TF Messages</strong>
 A common error we encountered involved message queues filling up and dropped TF messages. A practical solution was to remap TF topics explicitly:
 /tf := /rpi_11/tf<br />
-/tf_static := /rpi_11/tf_static</li>
-</ol>
+/tf_static := /rpi_11/tf_static</p>
 <p>One recurring issue I encountered was related to message queues filling up and TF messages being dropped. A solution that worked for me was remapping the TF topics. Specifically:
 /tf := /rpi_11/tf<br />
 /tf_static := /rpi_11/tf_static</p>
 <p>This remapping became necessary after I noticed an error message pop up when I closed RViz while SLAM and RViz were running together. The message highlighted improper remappings like /tf:=tf and /tf_static:=tf_static, which are ineffective.</p>
 <p>These remappings became essential after noticing incorrect defaults like /tf:=tf, which had no effect. Since these remappings are often hardcoded into launch files, they must be edited directly and cannot be passed as standard ROS 2 arguments.</p>
-<p>2- Editing Configuration Files
+<p><strong>2- Editing Configuration Files</strong>
 In /opt/ros/humble/share/turtlebot4_navigation/config, YAML files define parameters for SLAM, localization, and the Nav2 stack. We experimented with editing these files to disable or replace certain components—such as removing the default planner server in favor of our own. However, doing so led to system instability, likely due to additional internal dependencies that were not updated accordingly. This highlights the tight coupling between components in the Nav2 stack.</p>
-<p>3- TFs Not Displaying with view_frames</p>
+<p><strong>3- TFs Not Displaying with view_frames</strong></p>
 <p>Tools like view_frames from tf2_tools do not automatically account for namespaced TF topics. To visualize the full TF tree correctly, remapping is required at runtime:</p>
 <p>ros2 run tf2_tools view_frames                             \
         --ros-args                                         \
         -r /tf:=/rpi_11/tf -r /tf_static:=/rpi_11/tf_static</p>
 <p>After applying this, the TF tree was successfully generated and frames.pdf showed all expected transforms.</p>
-<p>4- Using TFs in Custom Nodes
-When using custom ROS 2 nodes that rely on TF data (e.g., for localization or planning), it is essential to launch them with the appropriate TF remappings. For example:</p>
+<p><strong>4- Using TFs in Custom Nodes</strong></p>
+<p>When using custom ROS 2 nodes that rely on TF data (e.g., for localization or planning), it is essential to launch them with the appropriate TF remappings. For example:</p>
 <p>ros2 run my_nodes tiny_astar_planner \
   --ros-args \
   -r /tf:=/rpi_11/tf \
