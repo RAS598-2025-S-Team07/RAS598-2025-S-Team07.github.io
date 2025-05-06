@@ -46,7 +46,7 @@ To detect and localize shoes we focuse on developing a machine learning model ca
 
 ![Data collection & Image processing](/assets/images/Fig4.png "The captured image was analyzed to map the full viewing area and determine the region where the shoe is most accurately represented on the screen.")
 
-Data collection was performed in a controlled indoor environment and classroom to ensure consistency, with the camera mounted on a tripod and a coordinate system marked on the floor to map image coordinates to physical positions as shown below. Data labeling was performed using the free and open-source software LabelMe, which allowed us to annotate each image with the shoe’s horizontal offset (x), distance from the camera (z), and orientation angle. The labeling convention we followed is illustrated in the figure below.
+Data collection was performed in a controlled indoor environment and classroom to ensure consistency, with the camera mounted on a tripod and a coordinate system marked on the floor to map image coordinates to physical positions as shown below. Data labeling was performed using the free and open-source software LabelMe, which allowed us to annotate each image with the shoe’s horizontal offset (x), distance from the camera (z), and orientation angle. The labeling convention we followed is illustrated in the figures below.
 
 ![Data collection & Image processing](/assets/images/Fig5.jpg "The current dataset covers only one lighting and environmental condition. For better generalization, future datasets will include varying lighting and scene conditions.")
 
@@ -62,7 +62,7 @@ As distance increases, both the bounding box size and screen mapping change due 
 ![Data collection & Image processing](/assets/images/Fig8.png "Distance cues such as shoe size in pixels and placement on the screen will help the model regress distance in addition to screen location.")
 
 ### Shoe Detection Model: Training and Inference
-To train the shoe detection and localization model, we first structured the dataset properly. The dataset directory includes a .csv annotation file, a folder containing all labeled images, and the Python training script. Each image in the dataset is labeled with normalized x-offset, z-distance from the camera, and orientation angle. A total of four values are regressed by the model.
+To train the shoe detection and localization model, we first structured the dataset properly. The dataset directory includes a .csv annotation file, a folder containing all labeled images, and the Python training script. Each image in the dataset is labeled with normalized x-offset, z-distance from the camera, and orientation angle.
 
 We used a lightweight pretrained convolutional neural network—ResNet18—as the backbone for the regression task. Its final fully connected layer was modified to output four continuous values corresponding to the shoe’s location and orientation. The model was trained using PyTorch, with data augmentation (such as rotations) to improve generalization. The model was trained using the Mean Squared Error (MSE) loss function and optimized with Adam. After training, the model was saved in a .pth file for later use in real-time inference.
 
@@ -75,7 +75,7 @@ This section outlines the core components of the robot’s autonomous behavior. 
 
 ### Real-Time Inference with DepthAI and OAK-D Camera
 The trained model is loaded and executed in real time using the OAK-D camera with DepthAI. The rgb_stereo launch file from the depthai_ros_driver package initializes the camera and publishes the RGB and stereo image streams to ROS 2 topics. These streams can be subscribed to for real-time image processing and pose estimation.
-Our custom ROS 2 node, shoe_predictor_node.py, performs the complete inference pipeline and publishes the estimated user direction and position. This data is used by the TurtleBot to adjust its motion accordingly, enabling dynamic following behavior.
+Our custom ROS 2 node, predict_publish_node.py, performs the complete inference pipeline and publishes the estimated user direction and position. This data is used by the TurtleBot to adjust its motion accordingly, enabling dynamic following behavior.
 
 ### Model Output
 The trained model outputs continuous values:
@@ -121,10 +121,10 @@ One of our original objectives was to use SLAM-generated maps for enhanced path 
 ![Challenges, Custom Development, and Solutions](/assets/images/Fig11.png "Map")
 
 - **Obstacle Avoidance Conflicts:**
-The Reactive Gap Finder generally performed well in local navigation. However, occasional collisions with obstacles persisted, despite extensive parameter tuning. To mitigate this, we attempted to combine gap-based obstacle avoidance with Nav2’s dynamic mapping and planning features. Integration proved difficult due to command conflicts: both the Nav2 controller and our custom node were publishing velocity commands to the /cmd_vel topic simultaneously, resulting in erratic behavior and deviations from the intended path. Attempts to resolve this by modifying the nav2.yaml configuration file were unsuccessful, as demonstrated in our test video.
+The Reactive Gap Finder generally performed well in local navigation. However, occasional collisions with obstacles persisted, despite extensive parameter tuning. To mitigate this, we attempted to combine gap-based obstacle avoidance with Nav2’s dynamic mapping and planning features. Integration proved difficult due to command conflicts: both the Nav2 controller and our custom node were publishing velocity commands to the /cmd_vel topic simultaneously, resulting in erratic behavior and deviations from the intended path. Attempts to resolve this by modifying the nav2.yaml configuration file were unsuccessful, as demonstrated in our video gallery.
 
 - **Custom Development:**
-To overcome dependencies on the Nav2 stack, we explored a fully custom approach by developing a lightweight A* planner. This planner receives the estimated user position and direction as a goal and generates a corresponding trajectory. However, for this approach to be fully functional, proper access to the robot’s coordinate frames (TFs) is essential. Despite several attempts, we were unable to consistently obtain the necessary TFs (e.g., odom, base_link, map) within our custom node. The node was only able to access the map frame, and transformations between key frames were missing. As a result, although the robot could localize itself in the map frame, the lack of proper frame transformations caused it to deviate from the generated path as illustrated in our test video.
+To overcome dependencies on the Nav2 stack, we explored a fully custom approach by developing a lightweight A* planner. This planner receives the estimated user position and direction as a goal and generates a corresponding trajectory. However, for this approach to be fully functional, proper access to the robot’s coordinate frames (TFs) is essential. Despite several attempts, we were unable to consistently obtain the necessary TFs (e.g., odom, base_link, map) within our custom node. The node was only able to access the map frame, and transformations between key frames were missing. As a result, although the robot could localize itself in the map frame, the lack of proper frame transformations caused it to deviate from the generated path as illustrated in our video gallery.
 
 ### Proposed Solutions and Workarounds
 
@@ -183,11 +183,17 @@ The camera_predictor_node and live_predict components together provide a robust 
 
 By fusing visual inference with LiDAR-based gap selection, the robot can adaptively and intelligently follow the user in dynamic environments, maintaining both safety and directional accuracy.
 
+## Video Gallery
+- **Navigation with Nav2: [here](https://youtu.be/6yrNDIciK04).
+- **Navigation with GapFinder and Nav2: [here](https://youtube.com/shorts/lw5F8Vkkgdc).
+- **GUI: [here](https://youtu.be/REP01mLDhJk).
+- **Project_Pitch [here]().
+  
 ## Graphical User Interface (GUI)
-### Current Progress:
-In this component of our project, we are simulating a ROS 2 NavigateToPose action server and integrate it with a PyQt5 graphical user interface (GUI) to visualize robot sensor data and navigation status. The action server acts as a dummy implementation that mimics the behavior of the standard NavigateToPose interface in ROS 2. It receives target pose goals from clients, simulates navigation by periodically publishing feedback (e.g., distance remaining), and returns a result upon completion to indicate whether the goal was successfully reached or not. Users can send goals using the ROS 2 command-line interface, specifying the desired position and orientation within the map frame. On the GUI side, we use PyQt5 to create a clean interface that displays LIDAR scan data, camera images, and the current status of the navigation process. The interface includes buttons to trigger visualizations and a status label that reflects the robot’s current state (e.g., Idle, Navigating, Completed). The GUI listens to the GoalStatusArray topic to receive real-time updates on the navigation goal, dynamically showing statuses such as Accepted, In Progress, or Aborted. In the final version, we replace the action server with the robot action server enabling us to monitor the navigation status. Loging buttons and camera will remain as tools for debugging purposes, while Lidar data display might not be needed in the final version. 
 
-![Current Progress](/assets/images/Fig12.png "GUI")
+In this component of our project, we are simulating a ROS 2 NavigateToPose action server and integrate it with a PyQt5 graphical user interface (GUI) to visualize robot sensor data and navigation status. The action server acts as a dummy implementation that mimics the behavior of the standard NavigateToPose interface in ROS 2. It receives target pose goals from clients, simulates navigation by periodically publishing feedback (e.g., distance remaining), and returns a result upon completion to indicate whether the goal was successfully reached or not. Users can send goals using the ROS 2 command-line interface, specifying the desired position and orientation within the map frame. On the GUI side, we use PyQt5 to create a clean interface that displays LIDAR scan data, camera images, and the current status of the navigation process. The interface includes buttons to trigger visualizations and a status label that reflects the robot’s current state (e.g., Idle, Navigating, Completed). The GUI listens to the GoalStatusArray topic to receive real-time updates on the navigation goal, dynamically showing statuses such as Accepted, In Progress, or Aborted.The main purpose of GUI in our project was for debugging purposes.
+
+![Graphical User Interface (GUI)](/assets/images/Fig12.png "GUI")
 
 ## Preparation Needs
 
@@ -203,11 +209,9 @@ In this component of our project, we are simulating a ROS 2 NavigateToPose actio
 
 ## Final Demonstration
 
-Conditions change in any environment. How will your robot handle variability in its environment?
-- Potential environmental variabilities include lighting conditions, the user’s relative direction with respect to the robot, and narrow gaps smaller than the robot’s diameter.
-- Changes in lighting conditions can affect image processing and user recognition accuracy. To address this, more advanced image processing algorithms that are robust to lighting variations will be explored.
-- In scenarios where the robot encounters narrow gaps that are smaller than its diameter, the robot needs predefined behavior. In our case, The robot will use SLAM and mapping as an alternative mean of motion planning.
-- To maintain accurate user tracking during movement, an optimal update rate for user position data will be determined. This will allow the robot to dynamically adjust the LiDAR beam it uses for distance keeping and movement direction correction, ensuring responsive and adaptive following behavior.
+Although we successfully integrated all core nodes and deployed them on the robot without runtime errors, we were ultimately unable to verify whether the system behaves as intended in a real-world setting. The complete ROS 2 package, including all test nodes, is available [here](https://github.com/RAS598-2025-S-Team07/Final_ROS2_Package.git). The primary limitation stemmed from recurring issues with the camera, which frequently crashed and failed to provide image streams. As a result, the gap_finder node received no updates on the user’s direction and defaulted to its initial heading (zero), causing the robot to move without user tracking.
+
+Future work should prioritize resolving the camera stability issue to enable reliable visual inference, which is critical for closed-loop behavior.
 
 ## Testing & Evaluation Plan
 
