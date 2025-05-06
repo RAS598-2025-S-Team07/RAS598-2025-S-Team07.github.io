@@ -127,7 +127,7 @@ Despite several attempts, we were unable to consistently obtain the necessary TF
 
 ### Proposed Solutions and Workarounds
 
-- **1. Resolving "Full Queue" Errors and Dropped TF Messages**
+- **Resolving "Full Queue" Errors and Dropped TF Messages**
 
 A common error we encountered involved message queues filling up and dropped TF messages. A practical solution was to remap TF topics explicitly:
 /tf := /rpi_11/tf  
@@ -135,11 +135,11 @@ A common error we encountered involved message queues filling up and dropped TF 
 
 This remapping became necessary after I noticed an error message pop up when I closed RViz while SLAM and RViz were running together. The message highlighted improper remappings like /tf:=tf and /tf_static:=tf_static, which are ineffective.
 
-- **2- Editing Configuration Files**
+- **Editing Configuration Files**
 
 In /opt/ros/humble/share/turtlebot4_navigation/config, YAML files define parameters for SLAM, localization, and the Nav2 stack. We experimented with editing these files to disable or replace certain components—such as removing the default planner server in favor of our own. However, unsuccessful, and likely due to additional internal dependencies that were not updated accordingly. This highlights the tight coupling between components in the Nav2 stack.
 
-- **3- TFs Not Displaying with view_frames**
+- **TFs Not Displaying with view_frames**
 
 Tools like view_frames from tf2_tools do not automatically account for namespaced TF topics. To visualize the full TF tree correctly, remapping is required at runtime:
 
@@ -149,7 +149,7 @@ ros2 run tf2_tools view_frames                             \
 
 After applying this, the TF tree was successfully generated and frames.pdf showed all expected transforms.
 
-- **4- Using TFs in Custom Nodes**
+- **Using TFs in Custom Nodes**
 
 When using custom ROS 2 nodes that rely on TF data (e.g., for localization or planning), it is essential to launch them with the appropriate TF remappings. For example:
 
@@ -160,6 +160,24 @@ ros2 run my_nodes tiny_astar_planner \
 
 While this remapping allowed my node to receive TFs (such as the map frame), I encountered issues with incomplete transformations between frames. As Dr. Aukes recommended, a workaround is to record the TFs from RViz or explicitly publish them yourself (e.g., with a static transform publisher or a TF broadcaster node), ensuring your node has access to all required transforms.
 ## Finalized ROS 2 Architecture
+
+Our final ROS 2 architecture consists of three primary nodes that work collaboratively to enable real-time user following and dynamic obstacle avoidance:
+
+- **camera_predictor_node**
+  
+Subscribes to the RGB image stream from the OAK-D camera and uses a pretrained ResNet18 model to estimate the user’s horizontal offset, distance, and heading angle based on shoe detection. It publishes these predictions as formatted strings to /rpi_11/prediction_topic.
+
+- **live_predict (via get_live_predictions())**
+  
+Independently captures live frames from the OAK-D camera using DepthAI, processes them through the same model as camera_predictor_node, and yields raw prediction values. This node is used in non-ROS workflows and during development for debugging or visualization.
+
+- **FollowGap_node (gap_finder)**
+  
+Receives heading information from the prediction topic and LiDAR scan data. It performs scan preprocessing, detects navigable gaps, and selects the safest path that aligns with the user’s predicted direction. It then publishes velocity commands to /rpi_11/cmd_vel to drive the robot accordingly.
+
+The camera_predictor_node and live_predict components together provide a robust estimate of the user's direction. This estimate is consumed by the gap_finder node, which ensures that navigation paths are not only safe but also aligned with the user's movements.
+
+By fusing visual inference with LiDAR-based gap selection, the robot can adaptively and intelligently follow the user in dynamic environments, maintaining both safety and directional accuracy.
 
 ## Graphical User Interface (GUI)
 ### Current Progress:
