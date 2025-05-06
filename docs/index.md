@@ -74,7 +74,7 @@ The trained model is loaded and executed in real time using the OAK-D camera wit
 Our custom ROS 2 node, shoe_predictor_node.py, performs the complete inference pipeline and publishes the estimated user direction and position. This data is used by the TurtleBot to adjust its motion accordingly, enabling dynamic following behavior.
 
 ### Model Output
-- The trained model outputs four continuous values:
+The trained model outputs continuous values:
 
 - Normalized x-offset (horizontal displacement of the shoe)
 
@@ -99,26 +99,69 @@ These values are processed to compute the user’s position relative to the robo
 
 This architecture enables frame-by-frame estimation of the user's shoe location and orientation in real time. Thanks to the lightweight nature of the ResNet18 model and efficient inference pipeline, this system is well-suited for deployment on resource-constrained platforms like the Raspberry Pi
 
+### Navigation and Motion Control
 
-### Current Progress
-In our previous revision, we introduced the use of SLAM as a secondary navigation method. In this architecture, the robot primarily relies on a reactive gap-finding algorithm for real-time obstacle avoidance. However, in situations where a passable gap cannot be identified, the robot falls back on the SLAM-generated map to make informed navigation decisions.
-While the core logic of our system remains unchanged, we have made several refinements. In the updated setup, a SLAM node runs continuously to map the environment as the robot moves. Once the user’s heading is determined, it is sent as a goal to the Nav2 planner server. This server generates a global path based on the current map. My custom Reactive Gap Finder node, which subscribes to the /rpi_11/plan topic, receives this path, follows it, and performs local obstacle avoidance by identifying and navigating through gaps in the environment.The figures below, which provide a zoomed-in view of the rqt_graph, clearly illustrate this architecture. As shown, the SLAM Toolbox subscribes to the /rpi_11/scan topic to perform mapping and localization. Meanwhile, the FollowerGap_node subscribes to the /rpi_11/plan topic to receive the global path coordinates for local planning.
+Initially, we introduced the use of SLAM as a secondary navigation method. In this architecture, the robot primarily relies on a reactive gap-finding algorithm for real-time obstacle avoidance. However, in situations where a passable gap cannot be identified, the robot falls back on the SLAM-generated map to make informed navigation decisions. In this setup, a SLAM node runs continuously to map the environment as the robot moves. Once the user’s heading is determined, it is sent as a goal to the Nav2 planner server. This server generates a global path based on the current map. My custom Reactive Gap Finder node, which subscribes to the /rpi_11/plan topic, receives this path, follows it, and performs local obstacle avoidance by identifying and navigating through gaps in the environment.The figures below, which provide a zoomed-in view of the rqt_graph, clearly illustrate this architecture. As shown, the SLAM Toolbox subscribes to the /rpi_11/scan topic to perform mapping and localization. Meanwhile, the FollowerGap_node subscribes to the /rpi_11/plan topic to receive the global path coordinates for local planning.
 
 ![Current Progress](/assets/images/Fig9.png "Rqt_graph_SLAM")
 
 ![Current Progress](/assets/images/Fig10.png "Rqt_graph_plan")
 
+From here, we present the key challenges encountered throughout the project, the custom solutions we implemented to address them, and the lessons learned during system integration and testing. This retrospective highlights both the technical hurdles we faced—such as SLAM, conflicting control inputs, and TF management—and the strategies we adopted to overcome them, including remapping, custom planner development, and refined system architecture.
 
-**Current Challenges:**
+** Challenges, Custom Development, and Solutions
 
-- **SLAM Integration Issues:** Although our goal was to use the SLAM-generated map for secondary path planning, issues with the `turtlebot4_navigation` package have made this integration difficult. I was able to successfully demonstrate the robot navigating using a map generated from my lab environment (see Figure below and the Navigation with Map video), but this success was not consistently reproducible.
+- **SLAM Integration Issues:**
+One of our original objectives was to use SLAM-generated maps for enhanced path planning and localization. While we successfully demonstrated navigation using maps created in a controlled lab setting (see Figure and accompanying Navigation with Map video), this success was inconsistent and difficult to reproduce reliably. The core issues stemmed from turtlebot4_navigation package.
 
 ![Current Progress](/assets/images/Fig11.png "Map")
 
-- **Obstacle Avoidance Conflicts:** While the Reactive Gap Finder generally performs well, I observed that the robot occasionally collides with obstacles despite significant parameter tuning. This is the primary motivation behind fusing it with the Nav2 dynamic mapping and planning capabilities. However, integration poses a challenge: to avoid conflicting commands, we must isolate the `planner_server` from the full `turtlebot4_navigation` stack. When both the Nav2 controller and my reactive gap logic publish to the `/cmd_vel` topic, the robot receives mixed commands and deviates from the intended path. This behavior is shown in the accompanying demonstration video. Attempts to resolve this by editing the `nav2.yaml` file were unsuccessful.
+- **Obstacle Avoidance Conflicts:**
+The Reactive Gap Finder generally performed well in local navigation. However, occasional collisions with obstacles persisted, despite extensive parameter tuning. To mitigate this, we attempted to combine gap-based obstacle avoidance with Nav2’s dynamic mapping and planning features. Integration proved difficult due to command conflicts: both the Nav2 controller and our custom node were publishing velocity commands to the /cmd_vel topic simultaneously, resulting in erratic behavior and deviations from the intended path. Attempts to resolve this by modifying the nav2.yaml configuration file were unsuccessful, as demonstrated in our test video.
 
-**Potential Final Solution:**
-In case we can not use the nav2 and its planner server, we stick to my Reactive gap finder and we make sure to use the gaps that are in the direction of user. 
+**Custom Development:**
+To overcome dependencies on the Nav2 stack, we explored a fully custom approach by developing a lightweight A* planner. This planner receives the estimated user position and direction as a goal and generates a corresponding trajectory. However, for this approach to be fully functional, proper access to the robot’s coordinate frames (TFs) is essential.
+
+Despite several attempts, we were unable to consistently obtain the necessary TFs (e.g., odom, base_link, map) within our custom node. The node was only able to access the map frame, and transformations between key frames were missing. As a result, although the robot could localize itself in the map frame, the lack of proper frame transformations caused it to deviate from the generated path as illustrated in our test video.
+
+**Proposed Solutions and Workarounds**
+
+1. Resolving "Full Queue" Errors and Dropped TF Messages
+A common error we encountered involved message queues filling up and dropped TF messages. A practical solution was to remap TF topics explicitly:
+/tf := /rpi_11/tf  
+/tf_static := /rpi_11/tf_static
+
+One recurring issue I encountered was related to message queues filling up and TF messages being dropped. A solution that worked for me was remapping the TF topics. Specifically:
+/tf := /rpi_11/tf  
+/tf_static := /rpi_11/tf_static
+
+
+This remapping became necessary after I noticed an error message pop up when I closed RViz while SLAM and RViz were running together. The message highlighted improper remappings like /tf:=tf and /tf_static:=tf_static, which are ineffective.
+
+These remappings became essential after noticing incorrect defaults like /tf:=tf, which had no effect. Since these remappings are often hardcoded into launch files, they must be edited directly and cannot be passed as standard ROS 2 arguments.
+
+2- Editing Configuration Files
+In /opt/ros/humble/share/turtlebot4_navigation/config, YAML files define parameters for SLAM, localization, and the Nav2 stack. We experimented with editing these files to disable or replace certain components—such as removing the default planner server in favor of our own. However, doing so led to system instability, likely due to additional internal dependencies that were not updated accordingly. This highlights the tight coupling between components in the Nav2 stack.
+
+3- TFs Not Displaying with view_frames
+
+Tools like view_frames from tf2_tools do not automatically account for namespaced TF topics. To visualize the full TF tree correctly, remapping is required at runtime:
+
+ros2 run tf2_tools view_frames                             \
+        --ros-args                                         \
+        -r /tf:=/rpi_11/tf -r /tf_static:=/rpi_11/tf_static
+
+After applying this, the TF tree was successfully generated and frames.pdf showed all expected transforms.
+
+4- Using TFs in Custom Nodes
+When using custom ROS 2 nodes that rely on TF data (e.g., for localization or planning), it is essential to launch them with the appropriate TF remappings. For example:
+
+ros2 run my_nodes tiny_astar_planner \
+  --ros-args \
+  -r /tf:=/rpi_11/tf \
+  -r /tf_static:=/rpi_11/tf_static
+
+While this remapping allowed my node to receive TFs (such as the map frame), I encountered issues with incomplete transformations between frames. As Dr. Aukes recommended, a workaround is to record the TFs from RViz or explicitly publish them yourself (e.g., with a static transform publisher or a TF broadcaster node), ensuring your node has access to all required transforms.
 
 ## Graphical User Interface (GUI)
 ### Current Progress:
