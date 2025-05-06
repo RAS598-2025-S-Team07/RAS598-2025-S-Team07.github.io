@@ -88,7 +88,7 @@ The trained model outputs continuous values:
 
 These values are processed to compute the user’s position relative to the robot and are published over ROS 2 for integration into the robot's control loop.
 
-### Key Functionalities of shoe_predictor_node.py:
+### Key Functionalities of predict_publisher_node.py:
 - Image Subscription: Subscribes to the RGBD stream published by the OAK-D.
 
 - Model Inference: Loads the pre-trained ResNet18 model to detect and locate the user's shoes in the image.
@@ -107,9 +107,9 @@ This architecture enables frame-by-frame estimation of the user's shoe location 
 
 Initially, we introduced the use of SLAM as a secondary navigation method. In this architecture, the robot primarily relies on a reactive gap-finding algorithm for real-time obstacle avoidance. However, in situations where a passable gap cannot be identified, the robot falls back on the SLAM-generated map to make informed navigation decisions. In this setup, a SLAM node runs continuously to map the environment as the robot moves. Once the user’s heading is determined, it is sent as a goal to the Nav2 planner server. This server generates a global path based on the current map. My custom Reactive Gap Finder node, which subscribes to the /rpi_11/plan topic, receives this path, follows it, and performs local obstacle avoidance by identifying and navigating through gaps in the environment.The figures below, which provide a zoomed-in view of the rqt_graph, clearly illustrate this architecture. As shown, the SLAM Toolbox subscribes to the /rpi_11/scan topic to perform mapping and localization. Meanwhile, the FollowerGap_node subscribes to the /rpi_11/plan topic to receive the global path coordinates for local planning.
 
-![Current Progress](/assets/images/Fig9.png "Rqt_graph_SLAM")
+![Navigation and Motion Control](/assets/images/Fig9.png "Rqt_graph_SLAM")
 
-![Current Progress](/assets/images/Fig10.png "Rqt_graph_plan")
+![Navigation and Motion Control](/assets/images/Fig10.png "Rqt_graph_plan")
 
 From here, we present the key challenges encountered throughout the project, the custom solutions we implemented to address them, and the lessons learned during system integration and testing. This retrospective highlights both the technical hurdles we faced—such as SLAM, conflicting control inputs, and TF management—and the strategies we adopted to overcome them, including remapping, custom planner development, and refined system architecture.
 
@@ -118,15 +118,13 @@ From here, we present the key challenges encountered throughout the project, the
 - **SLAM Integration Issues:**
 One of our original objectives was to use SLAM-generated maps for enhanced path planning and localization. While we successfully demonstrated navigation using maps created in a controlled lab setting (see Figure and accompanying Navigation with Map video), this success was inconsistent and difficult to reproduce reliably. The core issues stemmed from turtlebot4_navigation package.
 
-![Current Progress](/assets/images/Fig11.png "Map")
+![Challenges, Custom Development, and Solutions](/assets/images/Fig11.png "Map")
 
 - **Obstacle Avoidance Conflicts:**
 The Reactive Gap Finder generally performed well in local navigation. However, occasional collisions with obstacles persisted, despite extensive parameter tuning. To mitigate this, we attempted to combine gap-based obstacle avoidance with Nav2’s dynamic mapping and planning features. Integration proved difficult due to command conflicts: both the Nav2 controller and our custom node were publishing velocity commands to the /cmd_vel topic simultaneously, resulting in erratic behavior and deviations from the intended path. Attempts to resolve this by modifying the nav2.yaml configuration file were unsuccessful, as demonstrated in our test video.
 
 - **Custom Development:**
-To overcome dependencies on the Nav2 stack, we explored a fully custom approach by developing a lightweight A* planner. This planner receives the estimated user position and direction as a goal and generates a corresponding trajectory. However, for this approach to be fully functional, proper access to the robot’s coordinate frames (TFs) is essential.
-
-Despite several attempts, we were unable to consistently obtain the necessary TFs (e.g., odom, base_link, map) within our custom node. The node was only able to access the map frame, and transformations between key frames were missing. As a result, although the robot could localize itself in the map frame, the lack of proper frame transformations caused it to deviate from the generated path as illustrated in our test video.
+To overcome dependencies on the Nav2 stack, we explored a fully custom approach by developing a lightweight A* planner. This planner receives the estimated user position and direction as a goal and generates a corresponding trajectory. However, for this approach to be fully functional, proper access to the robot’s coordinate frames (TFs) is essential. Despite several attempts, we were unable to consistently obtain the necessary TFs (e.g., odom, base_link, map) within our custom node. The node was only able to access the map frame, and transformations between key frames were missing. As a result, although the robot could localize itself in the map frame, the lack of proper frame transformations caused it to deviate from the generated path as illustrated in our test video.
 
 ### Proposed Solutions and Workarounds
 
@@ -162,11 +160,14 @@ ros2 run my_nodes tiny_astar_planner \
   -r /tf_static:=/rpi_11/tf_static
 
 While this remapping allowed my node to receive TFs (such as the map frame), I encountered issues with incomplete transformations between frames. As Dr. Aukes recommended, a workaround is to record the TFs from RViz or explicitly publish them yourself (e.g., with a static transform publisher or a TF broadcaster node), ensuring your node has access to all required transforms.
+
 ## Finalized ROS 2 Architecture
 
 Our final ROS 2 architecture consists of three primary nodes that work collaboratively to enable real-time user following and dynamic obstacle avoidance:
 
-- **camera_predictor_node**
+![Finalized ROS 2 Architecture](/assets/images/output.png "Rqt_graph_plan")
+
+- **predictor_publisher_node**
   
 Subscribes to the RGB image stream from the OAK-D camera and uses a pretrained ResNet18 model to estimate the user’s horizontal offset, distance, and heading angle based on shoe detection. It publishes these predictions as formatted strings to /rpi_11/prediction_topic.
 
