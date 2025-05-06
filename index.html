@@ -458,6 +458,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#finalized-ros-2-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Finalized ROS 2 Architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#graphical-user-interface-gui" class="md-nav__link">
     <span class="md-ellipsis">
       Graphical User Interface (GUI)
@@ -740,6 +749,7 @@ To overcome dependencies on the Nav2 stack, we explored a fully custom approach 
   -r /tf:=/rpi_11/tf \
   -r /tf_static:=/rpi_11/tf_static</p>
 <p>While this remapping allowed my node to receive TFs (such as the map frame), I encountered issues with incomplete transformations between frames. As Dr. Aukes recommended, a workaround is to record the TFs from RViz or explicitly publish them yourself (e.g., with a static transform publisher or a TF broadcaster node), ensuring your node has access to all required transforms.</p>
+<h2 id="finalized-ros-2-architecture">Finalized ROS 2 Architecture</h2>
 <h2 id="graphical-user-interface-gui">Graphical User Interface (GUI)</h2>
 <h3 id="current-progress">Current Progress:</h3>
 <p>In this component of our project, we are simulating a ROS 2 NavigateToPose action server and integrate it with a PyQt5 graphical user interface (GUI) to visualize robot sensor data and navigation status. The action server acts as a dummy implementation that mimics the behavior of the standard NavigateToPose interface in ROS 2. It receives target pose goals from clients, simulates navigation by periodically publishing feedback (e.g., distance remaining), and returns a result upon completion to indicate whether the goal was successfully reached or not. Users can send goals using the ROS 2 command-line interface, specifying the desired position and orientation within the map frame. On the GUI side, we use PyQt5 to create a clean interface that displays LIDAR scan data, camera images, and the current status of the navigation process. The interface includes buttons to trigger visualizations and a status label that reflects the robot’s current state (e.g., Idle, Navigating, Completed). The GUI listens to the GoalStatusArray topic to receive real-time updates on the navigation goal, dynamically showing statuses such as Accepted, In Progress, or Aborted. In the final version, we replace the action server with the robot action server enabling us to monitor the navigation status. Loging buttons and camera will remain as tools for debugging purposes, while Lidar data display might not be needed in the final version. </p>
