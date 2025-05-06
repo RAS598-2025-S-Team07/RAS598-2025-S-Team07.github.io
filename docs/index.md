@@ -68,6 +68,7 @@ To train the shoe detection and localization model, we first structured the data
 We used a lightweight pretrained convolutional neural network—ResNet18—as the backbone for the regression task. Its final fully connected layer was modified to output four continuous values corresponding to the shoe’s location and orientation. The model was trained using PyTorch, with data augmentation (such as rotations) to improve generalization. The model was trained using the Mean Squared Error (MSE) loss function and optimized with Adam. After training, the model was saved in a .pth file for later use in real-time inference.
 
 ## Control and Autonomy
+This section outlines the core components of the robot’s autonomous behavior. We begin by describing the real-time inference method used to estimate the user's heading direction. Next, we detail the navigation and motion control strategies employed to guide the robot’s movement. Finally, we present the finalized ROS 2 architecture that integrates these components into a cohesive and functional system.
 
 ### Real-Time Inference with DepthAI and OAK-D Camera
 The trained model is loaded and executed in real time using the OAK-D camera with DepthAI. The rgb_stereo launch file from the depthai_ros_driver package initializes the camera and publishes the RGB and stereo image streams to ROS 2 topics. These streams can be subscribed to for real-time image processing and pose estimation.
