@@ -722,18 +722,18 @@ To overcome dependencies on the Nav2 stack, we explored a fully custom approach 
 <p>Despite several attempts, we were unable to consistently obtain the necessary TFs (e.g., odom, base_link, map) within our custom node. The node was only able to access the map frame, and transformations between key frames were missing. As a result, although the robot could localize itself in the map frame, the lack of proper frame transformations caused it to deviate from the generated path as illustrated in our test video.</p>
 <h3 id="proposed-solutions-and-workarounds">Proposed Solutions and Workarounds</h3>
 <ul>
-<li><strong>1. Resolving "Full Queue" Errors and Dropped TF Messages</strong></li>
+<li><strong>Resolving "Full Queue" Errors and Dropped TF Messages</strong></li>
 </ul>
 <p>A common error we encountered involved message queues filling up and dropped TF messages. A practical solution was to remap TF topics explicitly:
 /tf := /rpi_11/tf<br />
 /tf_static := /rpi_11/tf_static</p>
 <p>This remapping became necessary after I noticed an error message pop up when I closed RViz while SLAM and RViz were running together. The message highlighted improper remappings like /tf:=tf and /tf_static:=tf_static, which are ineffective.</p>
 <ul>
-<li><strong>2- Editing Configuration Files</strong></li>
+<li><strong>Editing Configuration Files</strong></li>
 </ul>
 <p>In /opt/ros/humble/share/turtlebot4_navigation/config, YAML files define parameters for SLAM, localization, and the Nav2 stack. We experimented with editing these files to disable or replace certain components—such as removing the default planner server in favor of our own. However, unsuccessful, and likely due to additional internal dependencies that were not updated accordingly. This highlights the tight coupling between components in the Nav2 stack.</p>
 <ul>
-<li><strong>3- TFs Not Displaying with view_frames</strong></li>
+<li><strong>TFs Not Displaying with view_frames</strong></li>
 </ul>
 <p>Tools like view_frames from tf2_tools do not automatically account for namespaced TF topics. To visualize the full TF tree correctly, remapping is required at runtime:</p>
 <p>ros2 run tf2_tools view_frames                             \
@@ -741,7 +741,7 @@ To overcome dependencies on the Nav2 stack, we explored a fully custom approach 
         -r /tf:=/rpi_11/tf -r /tf_static:=/rpi_11/tf_static</p>
 <p>After applying this, the TF tree was successfully generated and frames.pdf showed all expected transforms.</p>
 <ul>
-<li><strong>4- Using TFs in Custom Nodes</strong></li>
+<li><strong>Using TFs in Custom Nodes</strong></li>
 </ul>
 <p>When using custom ROS 2 nodes that rely on TF data (e.g., for localization or planning), it is essential to launch them with the appropriate TF remappings. For example:</p>
 <p>ros2 run my_nodes tiny_astar_planner \
@@ -750,6 +750,21 @@ To overcome dependencies on the Nav2 stack, we explored a fully custom approach 
   -r /tf_static:=/rpi_11/tf_static</p>
 <p>While this remapping allowed my node to receive TFs (such as the map frame), I encountered issues with incomplete transformations between frames. As Dr. Aukes recommended, a workaround is to record the TFs from RViz or explicitly publish them yourself (e.g., with a static transform publisher or a TF broadcaster node), ensuring your node has access to all required transforms.</p>
 <h2 id="finalized-ros-2-architecture">Finalized ROS 2 Architecture</h2>
+<p>Our final ROS 2 architecture consists of three primary nodes that work collaboratively to enable real-time user following and dynamic obstacle avoidance:</p>
+<ul>
+<li><strong>camera_predictor_node</strong></li>
+</ul>
+<p>Subscribes to the RGB image stream from the OAK-D camera and uses a pretrained ResNet18 model to estimate the user’s horizontal offset, distance, and heading angle based on shoe detection. It publishes these predictions as formatted strings to /rpi_11/prediction_topic.</p>
+<ul>
+<li><strong>live_predict (via get_live_predictions())</strong></li>
+</ul>
+<p>Independently captures live frames from the OAK-D camera using DepthAI, processes them through the same model as camera_predictor_node, and yields raw prediction values. This node is used in non-ROS workflows and during development for debugging or visualization.</p>
+<ul>
+<li><strong>FollowGap_node (gap_finder)</strong></li>
+</ul>
+<p>Receives heading information from the prediction topic and LiDAR scan data. It performs scan preprocessing, detects navigable gaps, and selects the safest path that aligns with the user’s predicted direction. It then publishes velocity commands to /rpi_11/cmd_vel to drive the robot accordingly.</p>
+<p>The camera_predictor_node and live_predict components together provide a robust estimate of the user's direction. This estimate is consumed by the gap_finder node, which ensures that navigation paths are not only safe but also aligned with the user's movements.</p>
+<p>By fusing visual inference with LiDAR-based gap selection, the robot can adaptively and intelligently follow the user in dynamic environments, maintaining both safety and directional accuracy.</p>
 <h2 id="graphical-user-interface-gui">Graphical User Interface (GUI)</h2>
 <h3 id="current-progress">Current Progress:</h3>
 <p>In this component of our project, we are simulating a ROS 2 NavigateToPose action server and integrate it with a PyQt5 graphical user interface (GUI) to visualize robot sensor data and navigation status. The action server acts as a dummy implementation that mimics the behavior of the standard NavigateToPose interface in ROS 2. It receives target pose goals from clients, simulates navigation by periodically publishing feedback (e.g., distance remaining), and returns a result upon completion to indicate whether the goal was successfully reached or not. Users can send goals using the ROS 2 command-line interface, specifying the desired position and orientation within the map frame. On the GUI side, we use PyQt5 to create a clean interface that displays LIDAR scan data, camera images, and the current status of the navigation process. The interface includes buttons to trigger visualizations and a status label that reflects the robot’s current state (e.g., Idle, Navigating, Completed). The GUI listens to the GoalStatusArray topic to receive real-time updates on the navigation goal, dynamically showing statuses such as Accepted, In Progress, or Aborted. In the final version, we replace the action server with the robot action server enabling us to monitor the navigation status. Loging buttons and camera will remain as tools for debugging purposes, while Lidar data display might not be needed in the final version. </p>
