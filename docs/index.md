@@ -159,6 +159,7 @@ ros2 run my_nodes tiny_astar_planner \
   -r /tf_static:=/rpi_11/tf_static
 
 While this remapping allowed my node to receive TFs (such as the map frame), I encountered issues with incomplete transformations between frames. As Dr. Aukes recommended, a workaround is to record the TFs from RViz or explicitly publish them yourself (e.g., with a static transform publisher or a TF broadcaster node), ensuring your node has access to all required transforms.
+## Finalized ROS 2 Architecture
 
 ## Graphical User Interface (GUI)
 ### Current Progress:
