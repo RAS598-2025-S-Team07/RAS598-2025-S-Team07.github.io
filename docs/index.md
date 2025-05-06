@@ -187,7 +187,7 @@ By fusing visual inference with LiDAR-based gap selection, the robot can adaptiv
 - **Navigation with Nav2: [here](https://youtu.be/6yrNDIciK04).
 - **Navigation with GapFinder and Nav2: [here](https://youtube.com/shorts/lw5F8Vkkgdc).
 - **GUI: [here](https://youtu.be/REP01mLDhJk).
-- **Project_Pitch [here]().
+- **Project_Pitch [here](https://youtu.be/0gbAOOkDoLg).
   
 ## Graphical User Interface (GUI)
 
