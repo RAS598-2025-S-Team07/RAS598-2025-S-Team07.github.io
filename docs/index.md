@@ -55,10 +55,6 @@ Data collection was performed in a controlled indoor environment and classroom t
 ![Data collection & Image processing](/assets/images/Fig6_1.png)
 
 To capture the variability in shoe placement, eight different images were taken at each floor coordinate. Additionally, to teach the model to infer depth, five images were captured at varying distances from a fixed origin for each shoe position. Each image in the dataset is annotated with the shoe's bounding box, its physical distance from the camera, and its relative floor coordinate.
-
-
-![Data collection & Image processing](/assets/images/Fig6_1.png "This provides the model with a rich variety of angles and orientations at a fixed position, improving positional awareness.")
-
 As distance increases, both the bounding box size and screen mapping change due to perspective scaling. The proposed machine learning pipeline includes an object detection backbone—ResNet18—to identify the shoes and estimate the user’s direction and distance.
 
 ![Data collection & Image processing](/assets/images/Fig7.png " Camera screen layout showing shoe position at 1500mm")
