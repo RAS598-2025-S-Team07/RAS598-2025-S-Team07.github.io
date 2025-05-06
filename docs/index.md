@@ -46,17 +46,20 @@ To detect and localize shoes we focuse on developing a machine learning model ca
 
 ![Data collection & Image processing](/assets/images/Fig4.png "The captured image was analyzed to map the full viewing area and determine the region where the shoe is most accurately represented on the screen.")
 
-Data collection was performed in a controlled indoor environment and classroom to ensure consistency, with the camera mounted on a tripod and a coordinate system marked on the floor to map image coordinates to physical positions as shown below.
+Data collection was performed in a controlled indoor environment and classroom to ensure consistency, with the camera mounted on a tripod and a coordinate system marked on the floor to map image coordinates to physical positions as shown below. Data labeling was performed using the free and open-source software LabelMe, which allowed us to annotate each image with the shoe’s horizontal offset (x), distance from the camera (z), and orientation angle. The labeling convention we followed is illustrated in the figure below.
 
 ![Data collection & Image processing](/assets/images/Fig5.jpg "The current dataset covers only one lighting and environmental condition. For better generalization, future datasets will include varying lighting and scene conditions.")
 
-To capture the variability in shoe placement, eight different images were taken at each floor coordinate. Additionally, to teach the model to infer depth, five images were captured at varying distances from a fixed origin for each shoe position. Each image in the dataset is annotated with the shoe's bounding box, its physical distance from the camera, and its relative floor coordinate. Data labeling was performed using the free and open-source software LabelMe, which allowed us to annotate each image with the shoe’s horizontal offset (x), distance from the camera (z), and orientation angle. The labeling convention we followed is illustrated in the figure below.
+![Data collection & Image processing](/assets/images/Fig5_1.png)
 
-![Data collection & Image processing](/assets/images/Fig6.png "This provides the model with a rich variety of angles and orientations at a fixed position, improving positional awareness.")
+![Data collection & Image processing](/assets/images/Fig6_1.png)
+
+To capture the variability in shoe placement, eight different images were taken at each floor coordinate. Additionally, to teach the model to infer depth, five images were captured at varying distances from a fixed origin for each shoe position. Each image in the dataset is annotated with the shoe's bounding box, its physical distance from the camera, and its relative floor coordinate.
+
+
+![Data collection & Image processing](/assets/images/Fig6_1.png "This provides the model with a rich variety of angles and orientations at a fixed position, improving positional awareness.")
 
 As distance increases, both the bounding box size and screen mapping change due to perspective scaling. The proposed machine learning pipeline includes an object detection backbone—ResNet18—to identify the shoes and estimate the user’s direction and distance.
-
-
 
 ![Data collection & Image processing](/assets/images/Fig7.png " Camera screen layout showing shoe position at 1500mm")
 
